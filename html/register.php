@@ -47,7 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (empty($_POST["rePassword"])) {
-      $rePassErr = "Hasło jest wymagane";
+      $passErr = "Hasło jest wymagane";
+    }
+
+    if ($_POST["rePassword"] != $_POST["password"]) {
+      $rePassErr = "Hasła muszą być takie same";
     }
 
     $user = new Users($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"]);

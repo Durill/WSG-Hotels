@@ -13,15 +13,15 @@ include_once __DIR__ . '/Statuses.php';
             switch($status){
                 case Statuses::OK:
                     return  '<div class="alert alert-success">
-                            You have successfully registered, you can now login!
+                            Rejestracja powiodła się! Teraz możesz się zalogować.
                             </div>';
                 case Statuses::FAILED:
                     return  '<div class="alert alert-warning">
-                            Account using this email already exists, please choose another!
+                            Konto o podanym adresie email już istnieje, proszę wybierz inny email!
                             </div>';
                 case Statuses::ERROR:
                     return  '<div class="alert alert-danger">
-                            An unexpected error occurred, try again later
+                            Wystąpił niespodziewany błąd, spróbuj ponownie później.
                             </div>';
             }
         }
