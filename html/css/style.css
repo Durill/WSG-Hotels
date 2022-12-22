@@ -850,7 +850,7 @@ ul.btn li:last-child {
 /** footer **/
 
 .footer {
-     background: url(../images/footer.jpg);
+     background-color: #1f1f1f;
      background-repeat: no-repeat;
      background-size: 100% 100%;
      padding-top: 115px;
