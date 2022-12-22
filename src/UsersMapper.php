@@ -1,5 +1,7 @@
 <?php
 
+include_once __DIR__ . '/Statuses.php';
+
 class UsersMapper{
     
 	private const DATABASE_HOST = 'localhost';
@@ -7,9 +9,11 @@ class UsersMapper{
 	private const DATABASE_PASS = '';
 	private const DATABASE_NAME = 'bsg-hotels';
 
+    private $statuses;
     private $connection;
 
     function __construct(){
+        $statuses = new Statuses();
     }
 
     private function openDBConnection(){
@@ -17,10 +21,12 @@ class UsersMapper{
             $connection = mysqli_connect(self::DATABASE_HOST, self::DATABASE_USER, self::DATABASE_PASS, self::DATABASE_NAME);
             if(mysqli_connect_errno()){
                 die ("Unable to connect to database: " . mysqli_error($connection));
+                return Statuses::ERROR;
             }
             return $connection;
         } catch(Exception $e){
             echo $e . mysqli_connect_error();
+            return Statuses::ERROR;
         }
     }
 
@@ -33,6 +39,7 @@ class UsersMapper{
             $statement->close();
         } catch(Exception $e){
             echo $e;
+            return Statuses::ERROR;
         }
     }
 
@@ -50,19 +57,19 @@ class UsersMapper{
                 return true;
             }
         } catch(Exception $e){
-            echo $e . '  -  ' . $connection->error;
+            echo $e;
+            return Statuses::ERROR;
         }
     }
 
 	function registerClient(Users $user){
         $this->connection = $this->openDBConnection();
         if (!$this->accountExists($user->getEmail())) {
-                echo 'Account using this email already exists, please choose another!';
+                return Statuses::FAILED;
         } else {
                 $this->save($user->getName(), $user->getSurname(), $user->getEmail(), $user->getPassword());
-                echo 'You have successfully registered, you can now login!';
+                return Statuses::OK;
         }
-
 		$this->connection->close();
 	}
 

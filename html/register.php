@@ -1,10 +1,15 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/Responses.php';
 include_once __DIR__ . '/../src/UsersMapper.php';
 include_once __DIR__ . '/../src/Users.php';
+
+include __DIR__ . '/template/navbar.php';
+
 $validator = new Validator();
 $usersMapper = new UsersMapper();
-include __DIR__ . '/template/navbar.php';
+$responses = new Responses();
+$response = "";
 
 $nameErr = $surnameErr = $emailErr = $passErr = $rePassErr = "";
 $name = $surname = $email = $pass = $rePass = "";
@@ -46,12 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $user = new Users($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"]);
-    $usersMapper->registerClient($user);
+    $response = $responses->userResponse($usersMapper->registerClient($user));
 }
 
 
 ?>
    <div class="contact">
+      <?php
+         if (strlen($response) > 0){
+            echo $response;
+         }
+      ?>
             <div class="container">
                <div class="row">
                   <div class="col-md-12">
