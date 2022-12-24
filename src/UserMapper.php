@@ -76,7 +76,11 @@ class UserMapper{
         }
 
         if($user->getPassword() == $user->getRePassword()){
-            $valid = true;
+            if(strlen($user->getPassword()) >= 8){
+                $valid = true;
+            }else{
+                return false;
+            }
         }else{
             return false;
         }

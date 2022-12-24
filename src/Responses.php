@@ -17,6 +17,7 @@ include_once __DIR__ . '/StatusesEnum.php';
                               -Imię musi mieć minimum 3 znaki i maksimum 25
                               -Nazwisko musi mieć minimum 3 znaki i maksimum 50
                               -Hasła muszą być takie same
+                              -Hasło musi mieć minimum 8 znaków
                               -Konto email nie może być już w użyciu
                             </div>');
                 case StatusesEnum::ERROR:
