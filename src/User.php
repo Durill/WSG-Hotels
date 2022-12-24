@@ -1,19 +1,21 @@
 <?php
 
-class Users{
+class User{
 
     private $id;
     private $name;
     private $surname;
     private $email;
     private $password;
+    private $rePassword;
     private $acc_activated;
 
-    function __construct($name, $surname, $email, $password){
+    function __construct($name, $surname, $email, $password, $rePassword){
         $this->setName($name);
         $this->setSurname($surname);
         $this->setEmail($email);
         $this->setPassword($password);
+        $this->setRePassword($rePassword);
         $this->setAccActivated(false);
     }
 
@@ -55,6 +57,14 @@ class Users{
 
     function setPassword($password){
         $this->password = $password;
+    }
+
+    function getRePassword(){
+        return $this->rePassword;
+    }
+
+    function setRePassword($rePassword){
+        $this->rePassword = $rePassword;
     }
 
     function getAccActivated(){

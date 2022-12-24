@@ -1,14 +1,12 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
-include_once __DIR__ . '/../src/Responses.php';
-include_once __DIR__ . '/../src/UsersMapper.php';
-include_once __DIR__ . '/../src/Users.php';
+include_once __DIR__ . '/../src/UserMapper.php';
+include_once __DIR__ . '/../src/User.php';
 
 include __DIR__ . '/template/navbar.php';
 
 $validator = new Validator();
-$usersMapper = new UsersMapper();
-$responses = new Responses();
+$userMapper = new UserMapper();
 $response = "";
 
 $nameErr = $surnameErr = $emailErr = $passErr = $rePassErr = "";
@@ -24,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     }
 
-    if (empty($_POST["surnname"])) {
+    if (empty($_POST["surname"])) {
       $surnameErr = "Podaj nazwisko!";
     } else {
       $surname = $validator->test_input($_POST["surname"]);
@@ -50,12 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $passErr = "Hasło jest wymagane";
     }
 
-    if ($_POST["rePassword"] != $_POST["password"]) {
-      $rePassErr = "Hasła muszą być takie same";
-    }
-
-    $user = new Users($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"]);
-    $response = $responses->userResponse($usersMapper->registerClient($user));
+    $user = new User($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"], $_POST["rePassword"]);
+    $response = $userMapper->registerClient($user);
 }
 
 
