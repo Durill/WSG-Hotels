@@ -44,18 +44,23 @@ class UserMapper{
     }
 
     private function accountExists($email){
-        $statement = $this->connection->prepare('SELECT id FROM users WHERE email = ?');
-        $statement->bind_param('s', $email);
-        $statement->execute();
-        $statement->store_result();
-        if($this->connection->connect_errno){
-            throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
-        }
+        if(strlen($email) > 0){
+            $statement = $this->connection->prepare('SELECT id FROM users WHERE email = ?');
+            $statement->bind_param('s', $email);
+            $statement->execute();
+            $statement->store_result();
+            if($this->connection->connect_errno){
+                throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+            }
 
-        if($statement->num_rows > 0){
-            $statement->close();
-            return true;
-        }else {
+            if($statement->num_rows > 0){
+                $statement->close();
+                return true;
+            }else {
+                $statement->close();
+                return false;
+            }
+        } else{
             $statement->close();
             return false;
         }
