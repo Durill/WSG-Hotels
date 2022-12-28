@@ -8,24 +8,6 @@
 @import url('https://fonts.googleapis.com/css?family=Raleway:100,400,600,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Dosis:400,500,600,700,800&display=swap');
 
-/*****---------------------------------------- 1) font-family: 'Rajdhani', sans-serif;
- 2) font-family: 'Poppins', sans-serif;
- ----------------------------------------*****/
-
-
-/*--------------------------------------------------------------------- import Files ---------------------------------------------------------------------*/
-
-@import url(animate.min.css);
-@import url(normalize.css);
-@import url(icomoon.css);
-@import url(font-awesome.min.css);
-@import url(meanmenu.css);
-@import url(owl.carousel.min.css);
-@import url(swiper.min.css);
-@import url(slick.css);
-@import url(jquery.fancybox.min.css);
-@import url(jquery-ui.css);
-@import url(nice-select.css);
 
 /*--------------------------------------------------------------------- skeleton ---------------------------------------------------------------------*/
 
@@ -783,7 +765,7 @@ ul.btn li:last-child {
 /** contact section **/
 
 .contact {
-     background: url(../images/contact_g.jpg);
+     background: url(../images/bg-hotel_f.jpg);
      background-repeat: no-repeat;
      background-size: 100% 100%;
      padding: 90px 0;
@@ -795,6 +777,7 @@ ul.btn li:last-child {
 }
 
 .main_form {
+     background-color: rgba(0, 0, 0, 0.5);
      padding: 70px 50px;
      border: #fff solid 2px;
      margin: 0 50px;
@@ -828,7 +811,8 @@ ul.btn li:last-child {
 .main_form .send_btn {
      font-size: 22px;
      transition: ease-in all 0.5s;
-     background-color: #48ca95;
+     background-color: #ffffff00;
+     border: #fff solid 2px;
      text-transform: uppercase;
      color: #fff;
      padding: 15px 0px;
@@ -842,9 +826,16 @@ ul.btn li:last-child {
 }
 
 .main_form .send_btn:hover {
-     background-color: #000;
+     background-color: rgb(255, 255, 255);
      transition: ease-in all 0.5s;
-     color: #fff;
+     color: rgb(0, 0, 0);
+}
+
+.main_form .contactus:focus {
+     background-color: rgb(255, 255, 255);
+     transition: ease-in all 0.5s;
+     color: rgb(0, 0, 0);
+     font-weight: 500;
 }
 
 #request *::placeholder {
@@ -859,7 +850,7 @@ ul.btn li:last-child {
 /** footer **/
 
 .footer {
-     background: url(../images/footer.jpg);
+     background-color: #1f1f1f;
      background-repeat: no-repeat;
      background-size: 100% 100%;
      padding-top: 115px;
@@ -1082,3 +1073,8 @@ ul.social_icon li a:hover {
 
 /** end laptop **/
 
+.error{
+     color: rgb(194, 5, 5);
+     font-weight: 600;
+     font-size: medium;
+}
