@@ -5,7 +5,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <title>cla</title>
+      <title>WSG - Hotels</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -25,5 +25,5 @@
          <a href="#home" class="right hover3">HOME</a>
          <a href="#news" class="right hover3">O NAS</a>
          <a href="#contact" class="right hover3">OFERTA</a>
-         <a href="#about" class="right hover3">ZALOGUJ / ZAREJESTRUJ</a>
+         <a href="<?php echo 'login.php'; ?>" class="right hover3">ZALOGUJ / ZAREJESTRUJ</a>
       </div>

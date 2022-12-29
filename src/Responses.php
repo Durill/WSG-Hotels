@@ -25,6 +25,11 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Wystąpił niespodziewany błąd, spróbuj ponownie później.
                             </div>';
+                case StatusesEnum::LOGIN_FAILED:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Email lub hasło jest nieprawidłowe.
+                            </div>';
             }
         }
     }

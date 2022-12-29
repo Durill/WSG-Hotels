@@ -99,7 +99,7 @@ class UserMapper{
         return $valid;
     }
 
-	function registerClient(User $user){
+	function registerUser(User $user){
         try{
             $this->openDBConnection();
 
@@ -115,6 +115,19 @@ class UserMapper{
             echo $this->responses->userResponse(StatusesEnum::ERROR);
         }
 	}
+
+    function loginUser($email, $password){
+        try{
+            if(strlen($email) > 0 && strlen($password) > 0){
+                $this->login($email, $password);
+                header('Location: index.html');
+            }else{
+                return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+            }
+        } catch(Exception $e){
+            echo $this->responses->userResponse(StatusesEnum::ERROR);
+        }
+    }
 
 }
 
