@@ -16,29 +16,12 @@
     font-size: 17px;
   }
   
-  /* Change the color of links on hover
   .topnav a:hover {
-    background-color: #ddd;
-    color: black;
-  } */
+    color: rgb(0, 104, 173);
+  } 
   
   /* Create a right-aligned (split) link inside the navigation bar */
   .topnav a.right {
     float: right;
     color: white;
-  }
-
-  .hover3 {
-    --c:linear-gradient(rgb(255, 255, 255) 0 0); /* update the color here */
-  }
-  .hover3:hover {
-        
-    padding-bottom: .15em;
-    background: var(--c), var(--c);
-    background-size: .3em .1em;
-    background-position:50% 100%;
-    background-repeat: no-repeat;
-    transition: .3s linear, background-size .3s .2s linear;
-    background-size: 40% .1em;
-    background-position: 10% 100%, 90% 100%;
   }
