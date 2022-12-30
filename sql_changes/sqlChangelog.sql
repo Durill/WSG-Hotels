@@ -16,3 +16,11 @@ CREATE TABLE IF NOT EXISTS `users` (
         ALTER TABLE users ADD PESEL VARCHAR;
     zamiast wklejenie `PESEL` varchar(11) do CREATE TABLE która już istnieje
 */
+
+-- Changes 30.12.2022 --
+CREATE TABLE `bsg-hotels`.`admins` (
+  `ID` INT NOT NULL AUTO_INCREMENT ,
+  `USERNAME` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL ,
+  `EMAIL` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL ,
+  `PASSWORD` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL ,
+  PRIMARY KEY (`ID`)) ENGINE = InnoDB;

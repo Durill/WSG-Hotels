@@ -1,7 +1,7 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
-include_once __DIR__ . '/../src/UserMapper.php';
-include_once __DIR__ . '/../src/User.php';
+include_once __DIR__ . '/../src/Mapper/UserMapper.php';
+include_once __DIR__ . '/../src/Entity/User.php';
 
 include __DIR__ . '/template/navbar.php';
 
