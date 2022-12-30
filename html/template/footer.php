@@ -4,7 +4,7 @@
            <div class="container">
               <div class="row">
                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                    <img class="logo1" src="images/logo1.png" alt="#"/>
+                    <img class="logo1" src="images/BSG-LOGO-wh.png" alt="#"/>
                     <ul class="social_icon">
                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
@@ -15,7 +15,7 @@
                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
                     <h3>About Us</h3>
                     <ul class="about_us">
-                       <li>dolor sit amet, consectetur<br> magna aliqua. Ut enim ad <br>minim veniam, <br> quisdotempor incididunt r</li>
+                       <li>Bringing people together is what we’ve done since opening our first BSG Hotel.<br>We are proud to act as a point of connection for millions of travelers, many just like you.</li>
                     </ul>
                  </div>
                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
@@ -24,20 +24,13 @@
                        <li>dolor sit amet,<br> consectetur <br>magna aliqua.<br> quisdotempor <br>incididunt ut e </li>
                     </ul>
                  </div>
-                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
-                    <form class="bottom_form">
-                       <h3>Newsletter</h3>
-                       <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
-                       <button class="sub_btn">subscribe</button>
-                    </form>
-                 </div>
               </div>
            </div>
            <div class="copyright">
               <div class="container">
                  <div class="row">
                     <div class="col-md-12">
-                       <p>© 2019 All Rights Reserved. Design by<a href="https://html.design/"> Free Html Templates</a></p>
+                       <p>© 2023 All Rights Reserved. Made by WSB Students.</p>
                     </div>
                  </div>
               </div>

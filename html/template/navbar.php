@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pl">
    <head>
@@ -16,14 +19,49 @@
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
    </head>
-   <!-- body -->
    <body class="main-layout">
-      <div class="topnav">
-         <a href='#logo'>
-            <img src="images/BSG-LOGO-wh.png" alt="Logo" width='25%'>
+   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+         <a class="navbar-brand" href="#">
+            <img src="images/BSG-LOGO-wh.png" alt="Logo" style='width:60px;height:auto;'>
          </a>
-         <a href="#home" class="right hover3">HOME</a>
-         <a href="#news" class="right hover3">O NAS</a>
-         <a href="#contact" class="right hover3">OFERTA</a>
-         <a href="<?php echo 'login.php'; ?>" class="right hover3">ZALOGUJ / ZAREJESTRUJ</a>
+         <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+         </button> -->
+         <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+            <li class="nav-item">
+               <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="#">O Nas</a>
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="#">Oferta</a>
+            </li>  
+            <?php
+               if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
+                  echo '<li class="nav-item dropdown">
+                           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                           <img src="images/profile-icon.png" alt="Logo" style="width:30px;height:auto;opacity:0.55;">
+                           </a>
+                           <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="#">Rezerwuj</a></li>
+                              <li><a class="dropdown-item" href="#">Moje Rezerwacje</a></li>
+                              <li><a class="dropdown-item" href="#">Moje Dane</a></li>
+                              <li><a class="dropdown-item" href="logout.php">Wyloguj</a></li>
+                           </ul>
+                        </li>';
+               }else{
+                  echo '<li class="nav-item">
+                           <a class="nav-link" href="login.php">Zaloguj</a>
+                        </li>';
+                  echo '<li class="nav-item">
+                           <a class="nav-link" href="register.php">Zarejestruj</a>
+                        </li>';
+               }
+            ?>
+            </ul>
+         </div>
       </div>
+   </nav>

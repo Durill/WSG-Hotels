@@ -43,6 +43,33 @@ class UserMapper{
         }
     }
 
+    private function login($email, $password){
+        $statement = $this->connection->prepare('SELECT name, password FROM users WHERE email = ?');
+        $statement->bind_param('s', $email);
+        $statement->execute();
+        $statement->store_result();
+        if ($statement->num_rows > 0) {
+            $statement->bind_result($name, $serverPassword);
+            $statement->fetch();
+            if (password_verify($password, $serverPassword)) {
+                session_start();
+                $_SESSION['loggedIn'] = true;
+                $_SESSION['name'] = $name;
+                $_SESSION['isUser'] = true;
+                return $this->responses->userResponse(StatusesEnum::OK);
+            } else {
+                return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+            }
+        } else {
+            return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+        }
+        
+        $statement->close();
+        if($this->connection->connect_errno){
+            throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+        }
+    }
+
     private function accountExists($email){
         if(strlen($email) > 0){
             $statement = $this->connection->prepare('SELECT id FROM users WHERE email = ?');
@@ -66,27 +93,51 @@ class UserMapper{
         }
     }
 
+    private function validatePassword($password, $rePassword){
+        if($password == $rePassword){
+            if(strlen($password) >= 8){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    private function validateName($name){
+        if(strlen($name) >= self::NAME_MIN_LENGTH && strlen($name) <= self::NAME_MAX_LENGTH){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private function validateSurname($surname){
+        if((strlen($surname) >= self::SURNAME_MIN_LENGTH && strlen($surname) <= self::SURNAME_MAX_LENGTH)){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     private function validateUserInput(User $user){
         $valid = false;
-        if(strlen($user->getName()) >= self::NAME_MIN_LENGTH && strlen($user->getName()) <= self::NAME_MAX_LENGTH){
+        if($this->validateName($user->getName())){
             $valid = true;
         }else{
             return false;
         }
 
-        if((strlen($user->getSurname()) >= self::SURNAME_MIN_LENGTH && strlen($user->getSurname()) <= self::SURNAME_MAX_LENGTH)){
+        if($this->validateSurname($user->getSurname())){
             $valid = true;
         }else {
             return false;
         }
 
-        if($user->getPassword() == $user->getRePassword()){
-            if(strlen($user->getPassword()) >= 8){
-                $valid = true;
-            }else{
-                return false;
-            }
-        }else{
+        if($this->validatePassword($user->getPassword(), $user->getRePassword())){
+            $valid = true;
+        }else {
             return false;
         }
 
@@ -118,15 +169,28 @@ class UserMapper{
 
     function loginUser($email, $password){
         try{
-            if(strlen($email) > 0 && strlen($password) > 0){
+            $this->openDBConnection();
+
+            if(strlen($email) > 0 && strlen($password) > 0 && $this->accountExists($email)){
                 $this->login($email, $password);
-                header('Location: index.html');
+                Header('Location: register.php');
+                exit();
             }else{
                 return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
             }
+
+            $this->connection->close();
         } catch(Exception $e){
             echo $this->responses->userResponse(StatusesEnum::ERROR);
         }
+    }
+
+    function logoutUser(){
+        session_start();
+        unset($_SESSION["loggedIn"]);
+        session_unset();
+        session_destroy();
+        header("Location:../html/register.php");
     }
 
 }
