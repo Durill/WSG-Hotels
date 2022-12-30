@@ -23,10 +23,6 @@ class User{
         return $this->id;
     }
 
-    function setId($id){
-        $this->id = $id;
-    }
-
     function getName(){
         return $this->name;
     }

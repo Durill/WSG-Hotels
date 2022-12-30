@@ -1,5 +1,5 @@
 <?php
-session_start();
+   session_start();
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -9,9 +9,6 @@ session_start();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <title>WSG - Hotels</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
       <link rel="stylesheet" href="css/style.css">
       <link rel="stylesheet" href="css/own-style.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">

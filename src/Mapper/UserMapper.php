@@ -1,7 +1,8 @@
 <?php
 
-include_once __DIR__ . '/StatusesEnum.php';
-include_once __DIR__ . '/Responses.php';
+include_once __DIR__ . '/../StatusesEnum.php';
+include_once __DIR__ . '/../Responses.php';
+include_once __DIR__ . '/../DBConnect.php';
 
 class UserMapper{
     
@@ -23,13 +24,12 @@ class UserMapper{
     }
 
     private function openDBConnection(){
-        mysqli_report(MYSQLI_REPORT_ERROR|MYSQLI_REPORT_STRICT);
-        error_reporting(E_ERROR | E_PARSE);
-        $con = new mysqli(self::DATABASE_HOST, self::DATABASE_USER, self::DATABASE_PASS, self::DATABASE_NAME);
-        if($con->connect_errno){
-            throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+        try{
+            $dbConnect = new DBConnect();
+            $this->connection = $dbConnect->makeDBConnection();
+        }catch(Exception $e){
+            echo $this->responses->userResponse(StatusesEnum::ERROR);
         }
-        $this->connection = $con;
     }
 
     private function save($name, $surname, $email, $password){
@@ -55,7 +55,6 @@ class UserMapper{
                 session_start();
                 $_SESSION['loggedIn'] = true;
                 $_SESSION['name'] = $name;
-                $_SESSION['isUser'] = true;
                 return $this->responses->userResponse(StatusesEnum::OK);
             } else {
                 return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
