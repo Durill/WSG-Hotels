@@ -95,6 +95,12 @@ body {
 	background-color: #2868c7;
   	transition: background-color 0.2s;
 }
+.comeBack{
+    text-align:center;
+    font-size:12px;
+    padding:5px;
+    color: #0d85a3;
+}
     </style>
 	<body>
     <?php
@@ -115,6 +121,7 @@ body {
 					<i class="fas fa-lock"></i>
 				</label>
 				<input type="password" name="password" placeholder="Hasło" id="password" required>
+                <a href="../html/register.php" class="comeBack">Wróć do strony głównej</a>
 				<input type="submit" value="Zaloguj">
 			</form>
 		</div>
