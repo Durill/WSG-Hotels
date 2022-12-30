@@ -186,7 +186,6 @@ class UserMapper{
 
     function logoutUser(){
         session_start();
-        unset($_SESSION["loggedIn"]);
         session_unset();
         session_destroy();
         header("Location:../html/register.php");

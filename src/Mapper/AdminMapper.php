@@ -47,6 +47,13 @@ class AdminMapper{
         }
     }
 
+    function logoutAdmin(){
+        session_start();
+        session_unset();
+        session_destroy();
+        Header("Location:../admin-html/admin-login.php");
+    }
+
     function loginAdmin(Admin $admin){
         try{
             $this->openDBConnection();
