@@ -158,7 +158,7 @@ class UserMapper{
                     $this->save($user->getName(), $user->getSurname(), $user->getEmail(), $user->getPassword());
                     return $this->responses->userResponse(StatusesEnum::OK);
             }else {
-                return $this->responses->userResponse(StatusesEnum::FAILED);
+                return $this->responses->userResponse(StatusesEnum::REGISTER_FAILED);
             }
 
             $this->connection->close();

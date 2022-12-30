@@ -897,7 +897,7 @@ ul.social_icon li a {
 }
 
 ul.social_icon li a:hover {
-     background-color: #48ca95;
+     background-color: #1f1f1f;
      color: #fff;
 }
 
@@ -910,10 +910,18 @@ ul.social_icon li a:hover {
      padding-bottom: 15px;
 }
 
+.about_us {
+     padding-left: 0px;
+}
+
 .about_us li {
      color: #fff;
      font-size: 17px;
      text-align: left;
+}
+
+.conta {
+     padding-left: 0px;
 }
 
 .conta li {

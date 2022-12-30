@@ -10,7 +10,7 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Rejestracja powiodła się! Teraz możesz się zalogować.
                             </div>';
-                case StatusesEnum::FAILED:
+                case StatusesEnum::REGISTER_FAILED:
                     return  '<div class="alert alert-warning alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Podane dane są niepoprawne, sprawdź czy jest zgodne z naszymi zasadami:
