@@ -2,7 +2,7 @@
 
 class StatusesEnum{
     const OK = "OK";
-    const ERROR = "ERROR";
+    const USER_NOT_FOUND = "USER_NOT_FOUND";
 
     const REGISTER_FAILED = "REGISTER_FAILED";
     const LOGIN_FAILED = "LOGIN_FAILED";

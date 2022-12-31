@@ -7,8 +7,6 @@ include __DIR__ . '/template/navbar.php';
 
 $validator = new Validator();
 $userMapper = new UserMapper();
-$response = "";
-
 $emailErr = $passErr = "";
 $email = $pass = "";
 
@@ -23,22 +21,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
     }
 
-    if (!isset($_POST["password"])) {
+    if (empty($_POST["password"])) {
       $passErr = "Hasło jest wymagane";
-    } else{
+    }else{
       $pass = $_POST["password"];
     }
 
-   $response = $userMapper->loginUser($email, $pass);
+   $userMapper->loginUser($email, $pass);
 }
 
 
 ?>
    <div class="contact">
       <?php
-         if (strlen($response) > 0){
-            echo $response;
+      if(isset($_SESSION['status'])){
+         if (strlen($_SESSION['status']) > 0){
+            echo $_SESSION['status'];
          }
+      }
       ?>
             <div class="container">
                <div class="row">
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                </div>
                <div class="row">
                   <div class="col-md-10 offset-md-1">
-                     <form id="request" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="main_form">
+                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="main_form">
                         <div class="row">
                            <div class="col-md-12">
                               <span class="error"><?php echo $emailErr;?></span>

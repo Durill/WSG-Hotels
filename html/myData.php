@@ -10,7 +10,6 @@ if(!isset($_SESSION['loggedIn'])){
 
 $user = new User();
 $userMapper = new UserMapper();
-$response = "";
 
 if(isset($_SESSION['id'])){
     $user = $userMapper->getUserData($_SESSION['id']);
@@ -18,15 +17,17 @@ if(isset($_SESSION['id'])){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(isset($_POST['dataChanger'])){
-        $userChanger = new User();
-        $userChanger->setId($_SESSION['id']);
-        $userChanger->setName($_POST['name']);
-        $userChanger->setSurname($_POST['surname']);
-        $userChanger->setEmail($_POST['email']);
-        $response = $userMapper->updateUserData($userChanger);
+        $userNewData = new User();
+        $userNewData->setId($_SESSION['id']);
+        $userNewData->setName($_POST['name']);
+        $userNewData->setSurname($_POST['surname']);
+        $userMapper->updateUserData($userNewData);
         $user = $userMapper->getUserData($_SESSION['id']);
     }elseif(isset($_POST['passwordChanger'])){
-        echo 'passwordChanger';
+        $userMapper->updateUserPassword($_SESSION['id'], array($_POST['oldPassword'], $_POST['newPassword'], $_POST['newRePassword']));
+    }elseif(isset($_POST['emailChanger'])){
+        $userMapper->updateUserEmail($_SESSION['id'], $_POST['email']);
+        $user = $userMapper->getUserData($_SESSION['id']);
     }
 }
 
@@ -34,9 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <div class="container-fluid userData">
     <?php
-        if (strlen($response) > 0){
-            echo $response;
+      if(isset($_SESSION['status'])){
+        if (strlen($_SESSION['status']) > 0){
+           echo $_SESSION['status'];
         }
+     }
     ?>
     <br>
   <h2>Moje Dane</h2>
@@ -50,6 +53,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="col-1"><p>Nazwisko:</p></div>
         <div class="col-2"><input class="form-control" type="text" id="surname" value="<?php echo $user->getSurname(); ?>" name="surname"></div>
     </div>
+    <br>
+    <div class="row dataRows">
+        <div class="col-1"></div>
+        <div class="col-1"><button type="submit" class="btn btn-primary" name="dataChanger">Zmień dane</button></div>
+    </div>
+  </form>
+  <br>
+  <h2>Mój Email</h2>
+  <br>
+  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="dataForms">
     <div class="row dataRows">
         <div class="col-1"><p>Email:</p></div>
         <div class="col-2"><input class="form-control" type="email" id="email" value="<?php echo $user->getEmail(); ?>" name="email"></div>
@@ -57,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <br>
     <div class="row dataRows">
         <div class="col-1"></div>
-        <div class="col-1"><button type="submit" class="btn btn-primary" name="dataChanger">Zmień dane</button></div>
+        <div class="col-1"><button type="submit" class="btn btn-primary" name="emailChanger">Zmień Email</button></div>
     </div>
   </form>
   <br>

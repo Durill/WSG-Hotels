@@ -22,7 +22,7 @@ class DBConnect{
             }
             return $connection;
         } catch(Exception $e){
-            echo $e;
+            Header('Location: errorPage.php');
         }
     }
 }

@@ -12,15 +12,26 @@ class AdminMapper{
         $this->responses = new Responses();
     }
 
+    /**
+     * Opening connection with DataBase
+     */
     private function openDBConnection(){
         try{
             $dbConnect = new DBConnect();
             $this->connection = $dbConnect->makeDBConnection();
         }catch(Exception $e){
-            echo $this->responses->userResponse(StatusesEnum::ERROR);
+            Header('Location: errorPage.php');
+            exit();
         }
     }
 
+    /**
+     * Starting session if admin is validated.
+     * 
+     * @param string $username - admin username.
+     * @param string $password - admin password.
+     * @return boolean value of logging in process.
+     */
     private function login($username, $password){
         $statement = $this->connection->prepare('SELECT password FROM admins WHERE username = ?');
         $statement->bind_param('s', $username);
@@ -33,20 +44,19 @@ class AdminMapper{
                 session_start();
                 $_SESSION['adminIn'] = true;
                 $_SESSION['name'] = $username;
-                return $this->responses->userResponse(StatusesEnum::OK);
+                return true;
             } else {
-                return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+                return false;
             }
         } else {
-            return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+            return false;
         }
-        
         $statement->close();
-        if($this->connection->connect_errno){
-            throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
-        }
     }
 
+    /**
+     * Destroying and unsetting admin session.
+     */
     function logoutAdmin(){
         session_start();
         session_unset();
@@ -54,21 +64,31 @@ class AdminMapper{
         Header("Location:../admin-html/admin-login.php");
     }
 
+    /**
+     * Checking admin credentials and logging in if valid.
+     * 
+     * @param Admin $admin - Admin class object.
+     * @return status of process.
+     */
     function loginAdmin(Admin $admin){
         try{
             $this->openDBConnection();
 
             if(strlen($admin->getUsername()) > 0 && strlen($admin->getPassword()) > 0){
-                $this->login($admin->getUsername(), $admin->getPassword());
-                Header('Location: admin-index.php');
-                exit();
+                if($this->login($admin->getUsername(), $admin->getPassword())){
+                    $_SESSION['adminStatus'] = $this->responses->userResponse(StatusesEnum::OK);
+                    Header('Location: admin-index.php');
+                    exit();
+                }else{
+                    $_SESSION['adminStatus'] = $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+                }
             }else{
-                return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+                $_SESSION['adminStatus'] = $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
             }
-
             $this->connection->close();
         } catch(Exception $e){
-            echo $this->responses->userResponse(StatusesEnum::ERROR);
+            Header('Location: errorPage.php');
+            exit();
         }
     }
 }

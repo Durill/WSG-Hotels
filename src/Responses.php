@@ -10,7 +10,7 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Sukces, wszystko się powiodło!
                             </div>';
-                case StatusesEnum::ERROR:
+                case StatusesEnum::USER_NOT_FOUND:
                     return  '<div class="alert alert-danger alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Wystąpił niespodziewany błąd, spróbuj ponownie później.
