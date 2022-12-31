@@ -1,27 +1,17 @@
-/* Create a top navigation bar with a black background color  */
-.topnav {
-    background-color: rgb(36, 36, 36);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
+  .userData{
+    margin-bottom: 100px;
   }
-  
-  /* Style the links inside the navigation bar */
-  .topnav a {
-    float: left;
-    color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
+
+  .dataForms p{
+    padding: 3px;
+    font-size: 20px;
   }
-  
-  .topnav a:hover {
-    color: rgb(0, 104, 173);
-  } 
-  
-  /* Create a right-aligned (split) link inside the navigation bar */
-  .topnav a.right {
-    float: right;
-    color: white;
+
+  .dataRows{
+    margin: 15px 5px;
+  }
+
+  .passForms p{
+    padding: 3px;
+    font-size: 15px;
   }

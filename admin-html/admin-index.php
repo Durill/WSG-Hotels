@@ -4,6 +4,12 @@ if(!isset($_SESSION['adminIn'])){
     Header("Location:admin-login.php");
 }
 ?>
-
+<?php
+    if(isset($_SESSION['adminStatus'])){
+        if (strlen($_SESSION['adminStatus']) > 0){
+            echo $_SESSION['adminStatus'];
+        }
+	 }
+?>
 </body>
 </html>

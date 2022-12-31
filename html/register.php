@@ -2,13 +2,10 @@
 include_once __DIR__ . '/../src/Validator.php';
 include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
-
 include __DIR__ . '/template/navbar.php';
 
 $validator = new Validator();
 $userMapper = new UserMapper();
-$response = "";
-
 $nameErr = $surnameErr = $emailErr = $passErr = $rePassErr = "";
 $name = $surname = $email = $pass = $rePass = "";
 
@@ -42,23 +39,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (empty($_POST["password"])) {
       $passErr = "Hasło jest wymagane";
+    }{
+      $pass = $_POST["password"];
     }
 
     if (empty($_POST["rePassword"])) {
       $passErr = "Hasło jest wymagane";
+    }else{
+      $rePass = $_POST["rePassword"];
     }
 
-    $user = new User($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"], $_POST["rePassword"]);
-    $response = $userMapper->registerUser($user);
+    $user = new User();
+    $user->setUserForRegistration($name, $surname, $email, $pass, $rePass);
+    $userMapper->registerUser($user);
 }
 
 
 ?>
    <div class="contact">
       <?php
-         if (strlen($response) > 0){
-            echo $response;
+      if(isset($_SESSION['status'])){
+         if (strlen($_SESSION['status']) > 0){
+            echo $_SESSION['status'];
          }
+      }
       ?>
             <div class="container">
                <div class="row">
