@@ -44,17 +44,17 @@ class UserMapper{
     }
 
     private function login($email, $password){
-        $statement = $this->connection->prepare('SELECT name, password FROM users WHERE email = ?');
+        $statement = $this->connection->prepare('SELECT id, password FROM users WHERE email = ?');
         $statement->bind_param('s', $email);
         $statement->execute();
         $statement->store_result();
         if ($statement->num_rows > 0) {
-            $statement->bind_result($name, $serverPassword);
+            $statement->bind_result($id, $serverPassword);
             $statement->fetch();
             if (password_verify($password, $serverPassword)) {
                 session_start();
                 $_SESSION['loggedIn'] = true;
-                $_SESSION['name'] = $name;
+                $_SESSION['id'] = $id;
                 return $this->responses->userResponse(StatusesEnum::OK);
             } else {
                 return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
@@ -69,7 +69,7 @@ class UserMapper{
         }
     }
 
-    private function accountExists($email){
+    private function accountExist($email){
         if(strlen($email) > 0){
             $statement = $this->connection->prepare('SELECT id FROM users WHERE email = ?');
             $statement->bind_param('s', $email);
@@ -140,7 +140,7 @@ class UserMapper{
             return false;
         }
 
-        if(!$this->accountExists($user->getEmail())){
+        if(!$this->accountExist($user->getEmail())){
             $valid = true;
         }else{
             return false;
@@ -159,8 +159,9 @@ class UserMapper{
             }else {
                 return $this->responses->userResponse(StatusesEnum::REGISTER_FAILED);
             }
-
             $this->connection->close();
+            Header('Location: login.php');
+            exit();
         } catch(Exception $e){
             echo $this->responses->userResponse(StatusesEnum::ERROR);
         }
@@ -170,14 +171,13 @@ class UserMapper{
         try{
             $this->openDBConnection();
 
-            if(strlen($email) > 0 && strlen($password) > 0 && $this->accountExists($email)){
+            if(strlen($email) > 0 && strlen($password) > 0 && $this->accountExist($email)){
                 $this->login($email, $password);
                 Header('Location: register.php');
                 exit();
             }else{
                 return $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
             }
-
             $this->connection->close();
         } catch(Exception $e){
             echo $this->responses->userResponse(StatusesEnum::ERROR);
@@ -189,6 +189,59 @@ class UserMapper{
         session_unset();
         session_destroy();
         header("Location:../html/register.php");
+    }
+
+    function getUserData($id){
+        try{
+            $this->openDBConnection();
+
+            $statement = $this->connection->prepare('SELECT name, surname, email FROM users WHERE id = ?');
+            $statement->bind_param('i', $id);
+            $statement->execute();
+            $statement->store_result();
+            if($this->connection->connect_errno){
+                throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+            }
+
+            if ($statement->num_rows > 0) {
+                $statement->bind_result($name, $surname, $email);
+                $statement->fetch();
+
+                $user = new User();
+                $user->setName($name);
+                $user->setSurname($surname);
+                $user->setEmail($email);
+
+                $statement->close();
+                return $user;
+            }else{
+                throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+            }
+        } catch(Exception $e){
+            echo $this->responses->userResponse(StatusesEnum::ERROR);
+        }
+
+    }
+
+    function updateUserData(User $user){
+        try{
+            $this->openDBConnection();
+
+            $email = "";
+            if(!$this->accountExist($user->getEmail())){
+                $email = ", email = '" . $user->getEmail() . "'";
+            }else{
+                return $this->responses->userResponse(StatusesEnum::UPDATE_EMAIL_FAILED);
+            }
+            $statement = $this->connection->prepare('UPDATE users SET name = ?, surname = ?'.$email.' WHERE id = ?');
+            $statement->bind_param('ssi',$user->getName(), $user->getSurname(), $user->getId());
+            $statement->execute();
+            $statement->close();
+            return $this->responses->userResponse(StatusesEnum::OK);
+        } catch(Exception $e){
+            echo $e;
+            throw new Exception($this->responses->userResponse(StatusesEnum::ERROR));
+        }
     }
 
 }

@@ -48,7 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $passErr = "Hasło jest wymagane";
     }
 
-    $user = new User($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"], $_POST["rePassword"]);
+    $user = new User();
+    $user->setUserForRegistration($_POST["name"], $_POST["surname"], $_POST["email"], $_POST["password"], $_POST["rePassword"]);
     $response = $userMapper->registerUser($user);
 }
 

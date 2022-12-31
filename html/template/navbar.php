@@ -45,7 +45,7 @@
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item" href="#">Rezerwuj</a></li>
                               <li><a class="dropdown-item" href="#">Moje Rezerwacje</a></li>
-                              <li><a class="dropdown-item" href="#">Moje Dane</a></li>
+                              <li><a class="dropdown-item" href="myData.php">Moje Dane</a></li>
                               <li><a class="dropdown-item" href="logout.php">Wyloguj</a></li>
                            </ul>
                         </li>';

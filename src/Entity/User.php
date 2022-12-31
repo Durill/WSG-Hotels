@@ -10,7 +10,7 @@ class User{
     private $rePassword;
     private $acc_activated;
 
-    function __construct($name, $surname, $email, $password, $rePassword){
+    function setUserForRegistration($name, $surname, $email, $password, $rePassword){
         $this->setName($name);
         $this->setSurname($surname);
         $this->setEmail($email);
@@ -21,6 +21,10 @@ class User{
 
     function getId(){
         return $this->id;
+    }
+
+    function setId($id){
+        $this->id = $id;
     }
 
     function getName(){
