@@ -243,6 +243,39 @@ class ReservationMapper{
     }
 
     /**
+     * Get all reservations joined with rooms and users.
+     * 
+     * @return array $reservations - array of reservations.
+     */
+    function getReservationsForAdmin(){
+        try{
+            $this->openDBConnection();
+
+            $statement = 'SELECT reservations.id AS id, places, price, room_type, ';
+            $statement .= 'from_date, to_date, canceled, CONCAT(name, " ", surname, " - ", email) as user ';
+            $statement .= 'FROM rooms LEFT JOIN reservations ON rooms.id = reservations.room_id ';
+            $statement .= 'LEFT JOIN users ON users.id = reservations.user_id ORDER BY from_date DESC';
+            $statement = $this->connection->prepare($statement);
+            $statement->execute();
+            $reservations = array();
+            $result = $statement->get_result();
+            if ($result->num_rows > 0){
+                while ($reservation = $result->fetch_assoc()) {
+                    array_push($reservations, $reservation);
+                }
+            } else {
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::RESERVATIONS_NOT_FOUND);
+            }
+
+            $this->connection->close();
+            return $reservations;
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+    }
+    
+    /**
      * Cancel reservation based on id.
      * 
      * @param int $reservation_id - reservation id.
