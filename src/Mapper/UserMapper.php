@@ -26,7 +26,7 @@ class UserMapper{
             $dbConnect = new DBConnect();
             $this->connection = $dbConnect->makeDBConnection();
         }catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -102,7 +102,7 @@ class UserMapper{
                 return false;
             }
         } catch (Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -206,7 +206,7 @@ class UserMapper{
             if($this->isUserInputValid($user)) {
                     if($this->save($user)){
                         $_SESSION['status'] = $this->responses->userResponse(StatusesEnum::OK);
-                        Header('Location: login.php');
+                        Header('Location: /html/login.php');
                         exit();
                     }
             }else {
@@ -214,7 +214,7 @@ class UserMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
 	}
@@ -232,7 +232,7 @@ class UserMapper{
             if(strlen($email) > 0 && strlen($password) > 0 && $this->accountExist($email)){
                 if($this->login($email, $password)){
                     $_SESSION['status'] = $this->responses->userResponse(StatusesEnum::OK);
-                    Header('Location: myData.php');
+                    Header('Location: /html/myData.php');
                     exit();
                 }else{
                     $_SESSION['status'] = $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
@@ -242,7 +242,7 @@ class UserMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -289,7 +289,7 @@ class UserMapper{
             $statement->close();
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
 
@@ -312,7 +312,7 @@ class UserMapper{
             $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::OK);
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -339,7 +339,7 @@ class UserMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -379,7 +379,7 @@ class UserMapper{
                 $this->connection->close();
             }
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }

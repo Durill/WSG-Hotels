@@ -33,7 +33,7 @@ class RoomMapper{
             $dbConnect = new DBConnect();
             $this->connection = $dbConnect->makeDBConnection();
         }catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -100,7 +100,7 @@ class RoomMapper{
             $statement->close();
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
 
@@ -134,7 +134,7 @@ class RoomMapper{
             $this->connection->close();
             return $rooms;
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -157,7 +157,7 @@ class RoomMapper{
                 return false;
             }
         } catch (Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -231,7 +231,7 @@ class RoomMapper{
             if($this->isRoomInputValid($room)) {
                     if($this->save($room)){
                         $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::OK);
-                        Header('Location: admin-rooms.php');
+                        Header('Location: /admin-html/admin-rooms.php');
                         exit();
                     }
             }else {
@@ -239,7 +239,7 @@ class RoomMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
 	}
@@ -257,7 +257,7 @@ class RoomMapper{
             if($this->isRoomInputValid($room) && $this->roomExists($room->getId())) {
                     if($this->update($room)){
                         $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::OK);
-                        Header('Location: admin-rooms.php');
+                        Header('Location: /admin-html/admin-rooms.php');
                         exit();
                     }
             }else {
@@ -265,7 +265,7 @@ class RoomMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
 	}

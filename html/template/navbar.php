@@ -45,16 +45,16 @@
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item" href="#">Rezerwuj</a></li>
                               <li><a class="dropdown-item" href="#">Moje Rezerwacje</a></li>
-                              <li><a class="dropdown-item" href="myData.php">Moje Dane</a></li>
-                              <li><a class="dropdown-item" href="logout.php">Wyloguj</a></li>
+                              <li><a class="dropdown-item" href="/html/myData.php">Moje Dane</a></li>
+                              <li><a class="dropdown-item" href="/html/logout.php">Wyloguj</a></li>
                            </ul>
                         </li>';
                }else{
                   echo '<li class="nav-item">
-                           <a class="nav-link" href="login.php">Zaloguj</a>
+                           <a class="nav-link" href="/html/login.php">Zaloguj</a>
                         </li>';
                   echo '<li class="nav-item">
-                           <a class="nav-link" href="register.php">Zarejestruj</a>
+                           <a class="nav-link" href="/html/register.php">Zarejestruj</a>
                         </li>';
                }
             ?>

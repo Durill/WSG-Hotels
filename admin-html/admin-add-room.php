@@ -4,7 +4,7 @@ include_once __DIR__ . '/../src/Mapper/RoomMapper.php';
 include_once __DIR__ . '/../src/Entity/Room.php';
 include __DIR__ . '/admin-navbar.php';
 if(!isset($_SESSION['adminIn'])){
-    Header("Location:admin-login.php");
+    Header("Location: /admin-html/admin-login.php");
 }
 
 $validator = new Validator();
