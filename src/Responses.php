@@ -103,6 +103,11 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Wprowadzono niepoprawne dane. Upewnij się, że wybrano prawidłowy pokój
                             </div>';
+                case StatusesEnum::RESERVATIONS_NOT_FOUND:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Brak rezerwacji.
+                            </div>';
             }
         }
     }

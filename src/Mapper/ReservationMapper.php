@@ -190,6 +190,38 @@ class ReservationMapper{
         }
 	}
 
+    /**
+     * Get joined user reservations with rooms based on user id.
+     * 
+     * @param int $user_id - user id.
+     * @return array $reservations - array of reservations.
+     */
+    function getUserReservations($user_id){
+        try{
+            $this->openDBConnection();
+
+            $statement = 'SELECT reservations.id AS id, places, price, room_type, from_date, to_date ';
+            $statement .= 'FROM rooms LEFT JOIN reservations ON rooms.id = reservations.room_id WHERE user_id = (?) ORDER BY from_date DESC';
+            $statement = $this->connection->prepare($statement);
+            $statement->bind_param('i', $user_id);
+            $statement->execute();
+            $reservations = array();
+            $result = $statement->get_result();
+            if ($result->num_rows > 0){
+                while ($reservation = $result->fetch_assoc()) {
+                    array_push($reservations, $reservation);
+                }
+            } else {
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::RESERVATIONS_NOT_FOUND);
+            }
+
+            $this->connection->close();
+            return $reservations;
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+    }
 }
 
 ?>
