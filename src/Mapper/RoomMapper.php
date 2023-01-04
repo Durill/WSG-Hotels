@@ -71,6 +71,25 @@ class RoomMapper{
     }
 
     /**
+     * Delete room from database.
+     * 
+     * @param id - id of room.
+     * @return boolean value of saving data process.
+     */
+    private function delete($id){
+        $statement = 'DELETE FROM rooms WHERE id = (?)';
+        $statement = $this->connection->prepare($statement);
+        $statement->bind_param('i', $id);
+        $statement->execute();
+        $success = false;
+        if($statement->affected_rows > 0){
+            $success = true;
+        }
+        $statement->close();
+        return $success;
+    }
+
+    /**
      * Provide room data using id.
      * 
      * @param integer $id - id of room.
@@ -264,6 +283,29 @@ class RoomMapper{
                 $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::UPDATE_FAILED);
             }
             $this->connection->close();
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+	}
+
+    /**
+     * Deleting room.
+     * 
+     * @param id - room id.
+     * @return status of process.
+     */
+	function deleteRoom($id){
+        try{
+            $this->openDBConnection();
+
+            if($this->delete($id)){
+                $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::OK);
+            } else{
+                $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::ROOM_DELETE_FAILED);
+            }
+            $this->connection->close();
+            Header('Location: /admin-html/admin-rooms.php');
         } catch(Exception $e){
             Header('Location: /html/errorPage.php');
             exit();

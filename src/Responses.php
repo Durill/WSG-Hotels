@@ -61,6 +61,11 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <br>-Cena jest większa niż 1 i mniejsza niż 100 mln
                             <br>-Rodzaj pokoju został wybrany
                             </div>';
+                case StatusesEnum::ROOM_DELETE_FAILED:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Wystąpił błąd podczas usuwania pokoju.
+                            </div>';
                 case StatusesEnum::ROOM_NOT_FOUND:
                     return  '<div class="alert alert-danger alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

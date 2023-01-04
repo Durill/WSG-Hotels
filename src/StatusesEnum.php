@@ -13,6 +13,7 @@ class StatusesEnum{
     // rooms
     const ROOM_NOT_FOUND = "ROOM_NOT_FOUND";
     const ROOMS_NOT_FOUND = "ROOMS_NOT_FOUND";
+    const ROOM_DELETE_FAILED = "ROOM_DELETE_FAILED";
 }
 
 ?>
