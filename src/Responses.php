@@ -37,6 +37,47 @@ include_once __DIR__ . '/StatusesEnum.php';
                             </div>';
             }
         }
+
+        function roomResponse($status){
+            switch($status){
+                case StatusesEnum::OK:
+                    return  '<div class="alert alert-success alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Sukces, wszystko się powiodło!
+                            </div>';
+                case StatusesEnum::CREATE_FAILED:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Podane dane są niepoprawne, sprawdź czy jest zgodne z naszymi zasadami:
+                            <br>-Ilość miejsc w pokoju jest większa lub równa 1 i mniejsza lub równa 10
+                            <br>-Cena jest większa niż 1 i mniejsza niż 100 mln
+                            <br>-Rodzaj pokoju został wybrany
+                            </div>';
+                case StatusesEnum::UPDATE_FAILED:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Podane dane są niepoprawne, sprawdź czy jest zgodne z naszymi zasadami:
+                            <br>-Ilość miejsc w pokoju jest większa lub równa 1 i mniejsza lub równa 10
+                            <br>-Cena jest większa niż 1 i mniejsza niż 100 mln
+                            <br>-Rodzaj pokoju został wybrany
+                            </div>';
+                case StatusesEnum::ROOM_DELETE_FAILED:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Wystąpił błąd podczas usuwania pokoju.
+                            </div>';
+                case StatusesEnum::ROOM_NOT_FOUND:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Nie znaleziono takiego pokoju.
+                            </div>';
+                case StatusesEnum::ROOMS_NOT_FOUND:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Nie znaleziono pokojów.
+                            </div>';
+            }
+        }
     }
 
 ?>

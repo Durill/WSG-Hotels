@@ -22,7 +22,10 @@
         <a class="nav-link" href="#">Rezerwacje</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="admin-logout.php">Wyloguj</a>
+        <a class="nav-link" href="/admin-html/admin-rooms.php">Pokoje</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/admin-html/admin-logout.php">Wyloguj</a>
       </li>
     </ul>
   </div>

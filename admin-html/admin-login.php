@@ -124,7 +124,7 @@ body {
 					<i class="fas fa-lock"></i>
 				</label>
 				<input type="password" name="password" placeholder="Hasło" id="password" required>
-                <a href="../html/register.php" class="comeBack">Wróć do strony głównej</a>
+                <a href="/html/register.php" class="comeBack">Wróć do strony głównej</a>
 				<input type="submit" value="Zaloguj">
 			</form>
 		</div>

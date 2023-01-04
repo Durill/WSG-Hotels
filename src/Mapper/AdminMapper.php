@@ -20,7 +20,7 @@ class AdminMapper{
             $dbConnect = new DBConnect();
             $this->connection = $dbConnect->makeDBConnection();
         }catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }
@@ -77,7 +77,7 @@ class AdminMapper{
             if(strlen($admin->getUsername()) > 0 && strlen($admin->getPassword()) > 0){
                 if($this->login($admin->getUsername(), $admin->getPassword())){
                     $_SESSION['adminStatus'] = $this->responses->userResponse(StatusesEnum::OK);
-                    Header('Location: admin-index.php');
+                    Header('Location: /admin-html/admin-index.php');
                     exit();
                 }else{
                     $_SESSION['adminStatus'] = $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
@@ -87,7 +87,7 @@ class AdminMapper{
             }
             $this->connection->close();
         } catch(Exception $e){
-            Header('Location: errorPage.php');
+            Header('Location: /html/errorPage.php');
             exit();
         }
     }

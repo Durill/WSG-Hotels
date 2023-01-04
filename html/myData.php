@@ -4,7 +4,7 @@ include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 
 if(!isset($_SESSION['loggedIn'])){
-    Header("Location:login.php");
+    Header("Location: /html/login.php");
     exit();
 }
 
