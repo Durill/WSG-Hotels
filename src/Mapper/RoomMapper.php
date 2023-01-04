@@ -159,6 +159,45 @@ class RoomMapper{
     }
 
     /**
+     * Provide rooms which ids are in input array.
+     * @param array $room_ids - array of room ids to return.
+     * @return array of Room class objects.
+     */
+    function getRoomsByIds($room_ids){
+        if (!$room_ids){
+            $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::ROOMS_NOT_FOUND);
+            return array();
+        }
+        try{
+            $this->openDBConnection();
+            $types = str_repeat('s', count($room_ids));
+            $in = str_repeat('?,', count($room_ids) - 1) . '?';
+            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms WHERE id IN ('.$in.')');
+            $statement->bind_param($types, ...$room_ids);
+            $rooms = array();
+            $statement->execute();
+            $statement->store_result();
+            if ($statement->num_rows > 0){
+                $statement->bind_result($id, $places, $price, $room_type);
+                while ($statement->fetch()) {
+                    $room = new Room($places, $price, $room_type);
+                    $room->setId($id);
+    
+                    array_push($rooms, $room);
+                }
+            }else {
+                $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::ROOMS_NOT_FOUND);
+            }
+
+            $this->connection->close();
+            return $rooms;
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+    }
+
+    /**
      * Checking if room exists.
      * 
      * @param int $id - room id.

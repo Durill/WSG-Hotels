@@ -43,8 +43,8 @@
                            <img src="images/profile-icon.png" alt="Logo" style="width:30px;height:auto;opacity:0.55;">
                            </a>
                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" href="#">Rezerwuj</a></li>
-                              <li><a class="dropdown-item" href="#">Moje Rezerwacje</a></li>
+                              <li><a class="dropdown-item" href="/html/createReservation.php">Rezerwuj</a></li>
+                              <li><a class="dropdown-item" href="/html/myReservations.php">Moje Rezerwacje</a></li>
                               <li><a class="dropdown-item" href="/html/myData.php">Moje Dane</a></li>
                               <li><a class="dropdown-item" href="/html/logout.php">Wyloguj</a></li>
                            </ul>

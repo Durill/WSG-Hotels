@@ -14,6 +14,9 @@ class StatusesEnum{
     const ROOM_NOT_FOUND = "ROOM_NOT_FOUND";
     const ROOMS_NOT_FOUND = "ROOMS_NOT_FOUND";
     const ROOM_DELETE_FAILED = "ROOM_DELETE_FAILED";
+    // reservations
+    const DATES_NOT_VALID = "ROOM_DELETE_FAILED";
+    const ROOM_NOT_VALID = "ROOM_NOT_VALID";
 }
 
 ?>

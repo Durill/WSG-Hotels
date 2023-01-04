@@ -35,3 +35,14 @@ CREATE TABLE IF NOT EXISTS `bsg-hotels`.`rooms` (
   `ROOM_TYPE` ENUM('bronze', 'silver', 'gold'),
   PRIMARY KEY (`ID`)
 ) ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `bsg-hotels`.`reservations` (
+  `ID`        INT NOT NULL AUTO_INCREMENT,
+  `ROOM_ID`   INT NOT NULL,
+  `USER_ID`   INT NOT NULL,
+  `FROM_DATE` DATE NOT NULL,
+  `TO_DATE` DATE NOT NULL,
+  PRIMARY KEY (`ID`),
+  FOREIGN KEY (`ROOM_ID`) REFERENCES `bsg-hotels`.`rooms`(`ID`),
+  FOREIGN KEY (`USER_ID`) REFERENCES `bsg-hotels`.`users`(`ID`)
+) ENGINE = InnoDB;
