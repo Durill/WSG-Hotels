@@ -148,7 +148,7 @@ class RoomMapper{
     private function roomExists($id){
         try{
             if(is_numeric($id) && $id > 0){
-                $statement = $this->connection->prepare('SELECT TOP 1 1 FROM rooms WHERE id = (?)');
+                $statement = $this->connection->prepare('SELECT COUNT(*) FROM rooms WHERE id = (?)');
                 $statement->bind_param('i', $id);
                 $statement->execute();
                 $statement->store_result();

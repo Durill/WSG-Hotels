@@ -37,8 +37,8 @@ if(isset($_SESSION['status'])){
                             <td>'.$room->getPrice().'</td>
                             <td>'.$room->getType().'</td>
                             <td>
-                                <a href="/admin-html/admin-room-edit.php/?id='.$room->getId().'" class="btn btn-sm btn-warning me-1">Edytuj</a>
-                                <a href="/admin-html/admin-room-delete.php/?id='.$room->getId().'" class="btn btn-sm btn-danger">Usuń</a>
+                                <a href="/admin-html/admin-edit-room.php/?id='.$room->getId().'" class="btn btn-sm btn-warning me-1">Edytuj</a>
+                                <a href="/admin-html/admin-delete-room.php/?id='.$room->getId().'" class="btn btn-sm btn-danger">Usuń</a>
                             </td></tr>';
                 }
             ?>
