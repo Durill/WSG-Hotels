@@ -22,7 +22,13 @@ $reservationMapper = new ReservationMapper();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['room_id'])) {
     $id = $validator->test_input($_POST['room_id']);
-    if (in_array($id, $available_rooms)) {
+    $in_rooms = false;
+    foreach($available_rooms as $room){
+        if ($room->getId() == $id){
+            $in_rooms = true;
+        }
+    }
+    if ($in_rooms) {
         $reservation = new Reservation($_POST['room_id'], $_SESSION['id'], $_SESSION['from_date'], $_SESSION['to_date']);
         $available_rooms = $reservationMapper->createReservation($reservation);
     } else {
