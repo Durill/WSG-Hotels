@@ -69,7 +69,7 @@ include_once __DIR__ . '/StatusesEnum.php';
                 case StatusesEnum::ROOMS_NOT_FOUND:
                     return  '<div class="alert alert-warning alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            Nie znaleziono takiego pokojów.
+                            Nie znaleziono pokojów.
                             </div>';
             }
         }

@@ -12,7 +12,7 @@ class StatusesEnum{
     const UPDATE_EMAIL_FAILED = "UPDATE_EMAIL_FAILED";
     // rooms
     const ROOM_NOT_FOUND = "ROOM_NOT_FOUND";
-    const ROOMS_NOT_FOUND = "ROOM_NOT_FOUND";
+    const ROOMS_NOT_FOUND = "ROOMS_NOT_FOUND";
 }
 
 ?>
