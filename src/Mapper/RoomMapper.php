@@ -3,6 +3,7 @@
 include_once __DIR__ . '/../StatusesEnum.php';
 include_once __DIR__ . '/../Responses.php';
 include_once __DIR__ . '/../DBConnect.php';
+include_once __DIR__ . '/../Entity/Room.php';
 
 enum RoomType: string{
     case BRONZE = 'bronze';
@@ -88,11 +89,8 @@ class RoomMapper{
                 $statement->bind_result($places, $price, $room_type);
                 $statement->fetch();
 
-                $room = new Room();
+                $room = new Room($places, $price, $type);;
                 $room->setId($id);
-                $room->setPlaces($places);
-                $room->setPrice($price);
-                $room->setType($room_type);
 
                 $statement->close();
                 return $room;
@@ -117,27 +115,22 @@ class RoomMapper{
         try{
             $this->openDBConnection();
 
-            $statement = $this->connection->query('SELECT id, places, price, room_type FROM rooms');
+            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms');
             $rooms = array();
-
-            if ($statement->num_rows == 0){
-                $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::ROOMS_NOT_FOUND);
-            }else {
-                while ($statement->num_rows > 0) {
-                    $statement->bind_result($id, $places, $price, $room_type);
-                    $statement->fetch();
-    
-                    $room = new Room();
+            $statement->execute();
+            $statement->store_result();
+            if ($statement->num_rows > 0){
+                $statement->bind_result($id, $places, $price, $room_type);
+                while ($statement->fetch()) {
+                    $room = new Room($places, $price, $room_type);
                     $room->setId($id);
-                    $room->setPlaces($places);
-                    $room->setPrice($price);
-                    $room->setType($room_type);
     
                     array_push($rooms, $room);
                 }
+            }else {
+                $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::ROOMS_NOT_FOUND);
             }
 
-            $statement->close();
             $this->connection->close();
             return $rooms;
         } catch(Exception $e){
@@ -238,7 +231,7 @@ class RoomMapper{
             if($this->isRoomInputValid($room)) {
                     if($this->save($room)){
                         $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::OK);
-                        Header('Location: rooms.php');
+                        Header('Location: admin-rooms.php');
                         exit();
                     }
             }else {
@@ -264,7 +257,7 @@ class RoomMapper{
             if($this->isRoomInputValid($room) && $this->roomExists($room->getId())) {
                     if($this->update($room)){
                         $_SESSION['status'] = $this->responses->roomResponse(StatusesEnum::OK);
-                        Header('Location: rooms.php');
+                        Header('Location: admin-rooms.php');
                         exit();
                     }
             }else {
