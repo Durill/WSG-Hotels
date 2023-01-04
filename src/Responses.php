@@ -108,6 +108,11 @@ include_once __DIR__ . '/StatusesEnum.php';
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             Brak rezerwacji.
                             </div>';
+                case StatusesEnum::RESERVATION_CANCEL_FAILED:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Nie możesz anulować tej rezerwacji
+                            </div>';
             }
         }
     }

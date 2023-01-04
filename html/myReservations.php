@@ -31,6 +31,7 @@ $reservations = $reservationMapper->getUserReservations($_SESSION['id']);
         <th scope="col">Ilość miejsc</th>
         <th scope="col">Cena</th>
         <th scope="col">Rodzaj</th>
+        <th scope="col">Anulowana</th>
         <th scope="col"></th>
         </tr>
     </thead>
@@ -42,9 +43,13 @@ $reservations = $reservationMapper->getUserReservations($_SESSION['id']);
                             <td>'.$reservation['to_date'].'</td>
                             <td>'.$reservation['places'].'</td>
                             <td>'.$reservation['price'].'</td>
-                            <td>'.ucfirst($reservation['room_type']).'</td>
-                            <td>';
-                    if (strtotime('+3 days') <= strtotime($reservation['from_date'])){
+                            <td>'.ucfirst($reservation['room_type']).'</td>';
+                    if ($reservation['canceled'] == 0) {
+                        echo '<td>NIE</td><td>';
+                    } else {
+                        echo '<td>TAK</td><td>';
+                    }
+                    if (strtotime('+3 days') <= strtotime($reservation['from_date']) && $reservation['canceled'] == 0){
                         echo '<a href="/html/cancelReservation.php/?id='.$reservation['id'].'" class="btn btn-sm btn-danger me-1">Anuluj</a>';
                     }
                     echo '</td></tr>';

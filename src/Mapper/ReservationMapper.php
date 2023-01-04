@@ -36,7 +36,7 @@ class ReservationMapper{
     /**
      * Create new reservation in database.
      * 
-     * @param Reservation $reservation - Room class object.
+     * @param Reservation $reservation - Reservation class object.
      * @return boolean value of saving data process.
      */
     private function save(Reservation $reservation){
@@ -45,6 +45,25 @@ class ReservationMapper{
         $statement->execute();
         $statement->close();
         return true;
+    }
+
+    /**
+     * Set reservation as canceled.
+     * 
+     * @param int $reservation_id - reservation id.
+     * @return boolean value of canceling reservation process.
+     */
+    private function cancel($reservation_id, $user_id){
+        $statement = 'UPDATE reservations SET canceled = 1 WHERE id = (?) AND user_id = (?) AND from_date >= (CURDATE() + INTERVAL 3 DAY)';
+        $statement = $this->connection->prepare($statement);
+        $statement->bind_param('ii', $reservation_id, $user_id);
+        $statement->execute();
+        $success = false;
+        if($statement->affected_rows > 0){
+            $success = true;
+        }
+        $statement->close();
+        return $success;
     }
 
     /**
@@ -106,7 +125,7 @@ class ReservationMapper{
             $this->openDBConnection();
 
             $statement = 'SELECT id FROM rooms WHERE id NOT IN (SELECT room_id FROM reservations WHERE ';
-            $statement .= '((?) BETWEEN from_date AND to_date) OR ((?) BETWEEN from_date AND to_date))';
+            $statement .= '(((?) BETWEEN from_date AND to_date) OR ((?) BETWEEN from_date AND to_date)) AND canceled = 0)';
             $statement = $this->connection->prepare($statement);
             $statement->bind_param('ss', $from_date, $to_date);
             $room_ids = array();
@@ -200,7 +219,7 @@ class ReservationMapper{
         try{
             $this->openDBConnection();
 
-            $statement = 'SELECT reservations.id AS id, places, price, room_type, from_date, to_date ';
+            $statement = 'SELECT reservations.id AS id, places, price, room_type, from_date, to_date, canceled ';
             $statement .= 'FROM rooms LEFT JOIN reservations ON rooms.id = reservations.room_id WHERE user_id = (?) ORDER BY from_date DESC';
             $statement = $this->connection->prepare($statement);
             $statement->bind_param('i', $user_id);
@@ -222,6 +241,31 @@ class ReservationMapper{
             exit();
         }
     }
+
+    /**
+     * Cancel reservation based on id.
+     * 
+     * @param int $reservation_id - reservation id.
+     * @param int $user_id - reservation from_date.
+     * @return status of process.
+     */
+
+	function cancelReservation($reservation_id, $user_id){
+        try{
+            $this->openDBConnection();
+
+            if($this->cancel($reservation_id, $user_id)){
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::OK);
+            } else{
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::RESERVATION_CANCEL_FAILED);
+            }
+            $this->connection->close();
+            Header('Location: /html/myReservations.php');
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+	}
 }
 
 ?>

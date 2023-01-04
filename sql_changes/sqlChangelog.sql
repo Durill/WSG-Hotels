@@ -46,3 +46,6 @@ CREATE TABLE IF NOT EXISTS `bsg-hotels`.`reservations` (
   FOREIGN KEY (`ROOM_ID`) REFERENCES `bsg-hotels`.`rooms`(`ID`),
   FOREIGN KEY (`USER_ID`) REFERENCES `bsg-hotels`.`users`(`ID`)
 ) ENGINE = InnoDB;
+
+ALTER TABLE `bsg-hotels`.`reservations` ADD COLUMN `CANCELED` BOOLEAN NOT NULL DEFAULT 0;
+
