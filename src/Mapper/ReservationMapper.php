@@ -67,6 +67,25 @@ class ReservationMapper{
     }
 
     /**
+     * Set reservation as canceled by admin.
+     * 
+     * @param int $reservation_id - reservation id.
+     * @return boolean value of canceling reservation process.
+     */
+    private function cancelByAdmin($reservation_id){
+        $statement = 'UPDATE reservations SET canceled = 1 WHERE id = (?) AND from_date >= (CURDATE() + INTERVAL 1 DAY)';
+        $statement = $this->connection->prepare($statement);
+        $statement->bind_param('i', $reservation_id);
+        $statement->execute();
+        $success = false;
+        if($statement->affected_rows > 0){
+            $success = true;
+        }
+        $statement->close();
+        return $success;
+    }
+
+    /**
      * Validating user or room id for reservation.
      * 
      * @param int $id - room or user id.
@@ -294,6 +313,30 @@ class ReservationMapper{
             }
             $this->connection->close();
             Header('Location: /html/myReservations.php');
+        } catch(Exception $e){
+            Header('Location: /html/errorPage.php');
+            exit();
+        }
+	}
+
+    /**
+     * Cancel reservation by admin based on reservation id.
+     * 
+     * @param int $reservation_id - reservation id.
+     * @return status of process.
+     */
+
+	function cancelReservationByAdmin($reservation_id){
+        try{
+            $this->openDBConnection();
+
+            if($this->cancelByAdmin($reservation_id)){
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::OK);
+            } else{
+                $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::RESERVATION_CANCEL_FAILED);
+            }
+            $this->connection->close();
+            Header('Location: /admin-html/admin-reservations.php');
         } catch(Exception $e){
             Header('Location: /html/errorPage.php');
             exit();
