@@ -47,5 +47,52 @@ CREATE TABLE IF NOT EXISTS `bsg-hotels`.`reservations` (
   FOREIGN KEY (`USER_ID`) REFERENCES `bsg-hotels`.`users`(`ID`)
 ) ENGINE = InnoDB;
 
-ALTER TABLE `bsg-hotels`.`reservations` ADD COLUMN `CANCELED` BOOLEAN NOT NULL DEFAULT 0;
+-- Changes 05.01.2023 --
 
+ALTER TABLE users convert TO CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+ALTER TABLE admins convert TO CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+ALTER TABLE rooms convert TO CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+ALTER TABLE reservations convert TO CHARACTER SET utf8mb4 COLLATE utf8mb4_polish_ci;
+
+DROP PROCEDURE IF EXISTS add_column;
+
+-- Procedure for adding columns - it will be added only if column doesnt exist
+
+DELIMITER //
+CREATE PROCEDURE add_column(IN ts VARCHAR(100) , IN tn VARCHAR(100), cn VARCHAR(100), ct VARCHAR(100))
+BEGIN
+IF NOT EXISTS( SELECT table_schema FROM INFORMATION_SCHEMA.COLUMNS
+           WHERE table_schema = ts COLLATE utf8mb4_polish_ci
+             AND table_name = tn COLLATE utf8mb4_polish_ci
+             AND column_name = cn COLLATE utf8mb4_polish_ci)  THEN
+        SET @ddl = CONCAT('ALTER TABLE ', tn);
+        SET @ddl = CONCAT(@ddl, ' ', 'ADD COLUMN');
+        SET @ddl = CONCAT(@ddl, ' ', cn);
+        SET @ddl = CONCAT(@ddl, ' ', ct);
+
+        PREPARE stmt FROM @ddl;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+
+END IF;
+END //
+DELIMITER ;
+
+CALL add_column('bsg-hotels', 'reservations', 'canceled', 'BOOLEAN NOT NULL DEFAULT 0');
+CALL add_column('bsg-hotels', 'reservations', 'price', 'DECIMAL(10, 2) NOT NULL DEFAULT (0)');
+CALL add_column('bsg-hotels', 'reservations', 'places', 'TINYINT NOT NULL DEFAULT (0)');
+CALL add_column('bsg-hotels', 'reservations', 'room_type', 'ENUM("bronze", "silver", "gold") NOT NULL DEFAULT ("bronze")');
+CALL add_column('bsg-hotels', 'rooms', 'deleted', 'BOOLEAN NOT NULL DEFAULT 0');
+
+UPDATE reservations AS res 
+LEFT JOIN rooms AS ro ON res.room_id = ro.id 
+SET 
+  res.price = (ro.price * (DATEDIFF(res.to_date, res.from_date) + 1)),
+  res.room_type = ro.room_type,
+  res.places = ro.places 
+WHERE res.price = 0;
+
+ALTER TABLE reservations 
+  ALTER COLUMN price DROP DEFAULT,
+  ALTER COLUMN places DROP DEFAULT,
+  ALTER COLUMN room_type DROP DEFAULT;

@@ -40,11 +40,20 @@ class ReservationMapper{
      * @return boolean value of saving data process.
      */
     private function save(Reservation $reservation){
-        $statement = $this->connection->prepare('INSERT INTO reservations (room_id, user_id, from_date, to_date) VALUES (?, ?, ?, ?)');
-        $statement->bind_param('iiss', $reservation->getRoomId(), $reservation->getUserId(), $reservation->getFromDate(), $reservation->getToDate());
+        $statement = 'INSERT INTO reservations (room_id, user_id, from_date, to_date, price, places, room_type) ';
+        $statement .= 'SELECT (?), (?), (?), (?), (ro.price * (DATEDIFF((?), (?)) + 1)) , ro.places, ro.room_type FROM rooms AS ro WHERE ro.id = ?';
+        $statement = $this->connection->prepare($statement);
+        $statement->bind_param(
+            'iissssi',
+            $reservation->getRoomId(), $reservation->getUserId(),
+            $reservation->getFromDate(), $reservation->getToDate(),
+            $reservation->getToDate(), $reservation->getFromDate(),
+            $reservation->getRoomId()
+        );
         $statement->execute();
+        $success = $statement->affected_rows > 0 ? true : false;
         $statement->close();
-        return true;
+        return $success;
     }
 
     /**
@@ -143,7 +152,7 @@ class ReservationMapper{
         try{
             $this->openDBConnection();
 
-            $statement = 'SELECT id FROM rooms WHERE id NOT IN (SELECT room_id FROM reservations WHERE ';
+            $statement = 'SELECT id FROM rooms WHERE deleted = 0 AND id NOT IN (SELECT room_id FROM reservations WHERE ';
             $statement .= '(((?) BETWEEN from_date AND to_date) OR ((?) BETWEEN from_date AND to_date)) AND canceled = 0)';
             $statement = $this->connection->prepare($statement);
             $statement->bind_param('ss', $from_date, $to_date);
@@ -185,6 +194,8 @@ class ReservationMapper{
                         unset($_SESSION['to_date']);
                         Header('Location: /html/myReservations.php');
                         exit();
+                    } else {
+                        $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::CREATE_FAILED);
                     }
             }else {
                 $_SESSION['status'] = $this->responses->reservationResponse(StatusesEnum::CREATE_FAILED);
@@ -238,8 +249,8 @@ class ReservationMapper{
         try{
             $this->openDBConnection();
 
-            $statement = 'SELECT reservations.id AS id, places, price, room_type, from_date, to_date, canceled ';
-            $statement .= 'FROM rooms LEFT JOIN reservations ON rooms.id = reservations.room_id WHERE user_id = (?) ORDER BY from_date DESC';
+            $statement = 'SELECT id, places, price, room_type, from_date, to_date, canceled ';
+            $statement .= 'FROM reservations WHERE user_id = (?) ORDER BY from_date DESC';
             $statement = $this->connection->prepare($statement);
             $statement->bind_param('i', $user_id);
             $statement->execute();
@@ -270,10 +281,9 @@ class ReservationMapper{
         try{
             $this->openDBConnection();
 
-            $statement = 'SELECT reservations.id AS id, places, price, room_type, ';
-            $statement .= 'from_date, to_date, canceled, CONCAT(name, " ", surname, " - ", email) as user ';
-            $statement .= 'FROM rooms LEFT JOIN reservations ON rooms.id = reservations.room_id ';
-            $statement .= 'LEFT JOIN users ON users.id = reservations.user_id ORDER BY from_date DESC';
+            $statement = 'SELECT reservations.id AS id, places, price, room_type, from_date, to_date, ';
+            $statement .= 'canceled, CONCAT(name, " ", surname, " - ", email) as user ';
+            $statement .= 'FROM reservations LEFT JOIN users ON users.id = reservations.user_id ORDER BY from_date DESC';
             $statement = $this->connection->prepare($statement);
             $statement->execute();
             $reservations = array();

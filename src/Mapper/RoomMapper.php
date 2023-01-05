@@ -77,7 +77,7 @@ class RoomMapper{
      * @return boolean value of saving data process.
      */
     private function delete($id){
-        $statement = 'DELETE FROM rooms WHERE id = (?)';
+        $statement = 'UPDATE rooms SET deleted = 1 WHERE id = (?)';
         $statement = $this->connection->prepare($statement);
         $statement->bind_param('i', $id);
         $statement->execute();
@@ -99,7 +99,7 @@ class RoomMapper{
         try{
             $this->openDBConnection();
 
-            $statement = $this->connection->prepare('SELECT places, price, room_type FROM rooms WHERE id = (?)');
+            $statement = $this->connection->prepare('SELECT places, price, room_type FROM rooms WHERE id = (?) AND deleted = 0');
             $statement->bind_param('i', $id);
             $statement->execute();
             $statement->store_result();
@@ -134,7 +134,7 @@ class RoomMapper{
         try{
             $this->openDBConnection();
 
-            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms');
+            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms WHERE deleted = 0');
             $rooms = array();
             $statement->execute();
             $statement->store_result();
@@ -172,7 +172,7 @@ class RoomMapper{
             $this->openDBConnection();
             $types = str_repeat('s', count($room_ids));
             $in = str_repeat('?,', count($room_ids) - 1) . '?';
-            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms WHERE id IN ('.$in.')');
+            $statement = $this->connection->prepare('SELECT id, places, price, room_type FROM rooms WHERE id IN ('.$in.') AND deleted = 0');
             $statement->bind_param($types, ...$room_ids);
             $rooms = array();
             $statement->execute();
@@ -206,7 +206,7 @@ class RoomMapper{
     private function roomExists($id){
         try{
             if(is_numeric($id) && $id > 0){
-                $statement = $this->connection->prepare('SELECT COUNT(*) FROM rooms WHERE id = (?)');
+                $statement = $this->connection->prepare('SELECT COUNT(*) FROM rooms WHERE id = (?) AND deleted = 0');
                 $statement->bind_param('i', $id);
                 $statement->execute();
                 $statement->store_result();
