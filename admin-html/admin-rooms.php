@@ -35,7 +35,7 @@ if(isset($_SESSION['status'])){
                     echo '<tr><th scope="row">'.$room->getId().'</th>
                             <td>'.$room->getPlaces().'</td>
                             <td>'.$room->getPrice().'</td>
-                            <td>'.$room->getType().'</td>
+                            <td>'.ucfirst($room->getType()).'</td>
                             <td>
                                 <a href="/admin-html/admin-edit-room.php/?id='.$room->getId().'" class="btn btn-sm btn-warning me-1">Edytuj</a>
                                 <a href="/admin-html/admin-delete-room.php/?id='.$room->getId().'" class="btn btn-sm btn-danger">Usuń</a>

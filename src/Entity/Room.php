@@ -6,6 +6,7 @@ class Room{
     private $places;
     private $price;
     private $type;
+    private $deleted;
 
     function __construct($places, $price, $type){
         $this->setPlaces($places);
@@ -43,6 +44,14 @@ class Room{
 
     function setType($type){
         $this->type = $type;
+    }
+
+    function getDeleted(){
+        return $this->deleted;
+    }
+
+    function setDeleted($deleted){
+        $this->deleted = $deleted;
     }
 }
 ?>

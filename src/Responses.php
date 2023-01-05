@@ -78,6 +78,43 @@ include_once __DIR__ . '/StatusesEnum.php';
                             </div>';
             }
         }
+
+        function reservationResponse($status){
+            switch($status){
+                case StatusesEnum::OK:
+                    return  '<div class="alert alert-success alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Sukces, wszystko się powiodło!
+                            </div>';
+                case StatusesEnum::ROOMS_NOT_FOUND:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Nie znaleziono wolnych pokojów dla wybranych dat, spróbuj wybrać inne.
+                            </div>';
+                case StatusesEnum::DATES_NOT_VALID:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Wprowadzono niepoprawne dane. Upewnij się, że:
+                            <br>-Data rozpoczęcia rezerwacji nie jest przed datą zakończenia
+                            <br>-Data rozpoczęcia rezerwacji nie może być wcześniejsza niż data jutrzejsza
+                            </div>';
+                case StatusesEnum::ROOM_NOT_VALID:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Wprowadzono niepoprawne dane. Upewnij się, że wybrano prawidłowy pokój
+                            </div>';
+                case StatusesEnum::RESERVATIONS_NOT_FOUND:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Brak rezerwacji.
+                            </div>';
+                case StatusesEnum::RESERVATION_CANCEL_FAILED:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Nie możesz anulować tej rezerwacji
+                            </div>';
+            }
+        }
     }
 
 ?>
