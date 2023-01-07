@@ -32,7 +32,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 }
 
 ?>
-<div class="container-md mt-5" style="max-width: 500px;">
+<div class="container-sm mt-5" style="max-width: 500px;">
+    <?php
+        if(isset($_SESSION['status'])){
+            if (strlen($_SESSION['status']) > 0){
+                echo $_SESSION['status'];
+                unset($_SESSION['status']);
+            }
+        }
+    ?>
     <form action="" method="POST" class="border rounded-1 border-primary p-2">
         <p>Czy na pewno chcesz usunąć ten pokój?</p>
         <p>ID pokoju: <?php echo $id; ?></p>

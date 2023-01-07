@@ -42,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
 
 ?>
    <div class="contact">
+      <div class="container-sm">
       <?php
       if(isset($_SESSION['status'])){
          if (strlen($_SESSION['status']) > 0){
@@ -50,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
          }
       }
       ?>
+      </div>
             <div class="container">
                <div class="row">
                   <div class="col-md-12">

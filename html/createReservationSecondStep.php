@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['room_id']) && isset($_
 
 ?>
 
-<div class="container-fluid userData">
+<div class="container-sm userData">
     <?php
       if(isset($_SESSION['status'])){
         if (strlen($_SESSION['status']) > 0){

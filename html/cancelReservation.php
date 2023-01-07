@@ -33,15 +33,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 }
 
 ?>
-<div class="container-fluid">
-    <?php
-        if(isset($_SESSION['status'])){
-            if (strlen($_SESSION['status']) > 0){
-                echo $_SESSION['status'];
-                unset($_SESSION['status']);
+<div class="container-sm">
+    <div class="mt-2">
+        <?php
+            if(isset($_SESSION['status'])){
+                if (strlen($_SESSION['status']) > 0){
+                    echo $_SESSION['status'];
+                    unset($_SESSION['status']);
+                }
             }
-        }
-    ?>
+        ?>
+    </div>
     <br>
   <h2 class="text-center" >Anuluje rezerwację</h2>
   <br>
