@@ -5,6 +5,12 @@ include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 include __DIR__ . '/template/navbar.php';
 
+
+if(isset($_SESSION['loggedIn'])){
+   Header("Location: /html/myData.php");
+   exit();
+}
+
 $validator = new Validator();
 $csrfToken = new CSRFToken();
 $userMapper = new UserMapper();

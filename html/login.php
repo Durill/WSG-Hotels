@@ -12,6 +12,12 @@ $csrfToken = new CSRFToken();
 $emailErr = $passErr = "";
 $email = $pass = "";
 
+if(isset($_SESSION['loggedIn'])){
+   Header("Location: /html/myData.php");
+   exit();
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
    if ($csrfToken->verifyToken($_POST['csrf_token'])){
       if (!isset($_POST["email"])) {
