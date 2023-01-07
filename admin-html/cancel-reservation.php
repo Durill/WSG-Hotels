@@ -32,7 +32,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 }
 
 ?>
-<div class="container-fluid">
+<div class="container-sm mt-2">
     <?php
         if(isset($_SESSION['status'])){
             if (strlen($_SESSION['status']) > 0){

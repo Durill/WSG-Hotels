@@ -18,7 +18,7 @@ include_once __DIR__ . '/StatusesEnum.php';
                 case StatusesEnum::REGISTER_FAILED:
                     return  '<div class="alert alert-warning alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            Podane dane są niepoprawne, sprawdź czy jest zgodne z naszymi zasadami:
+                            Podane dane są niepoprawne, sprawdź czy są zgodne z naszymi zasadami:
                             <br>-Imię musi mieć minimum 3 znaki i maksimum 25
                             <br>-Nazwisko musi mieć minimum 3 znaki i maksimum 50
                             <br>-Hasła muszą być takie same
@@ -33,7 +33,21 @@ include_once __DIR__ . '/StatusesEnum.php';
                 case StatusesEnum::UPDATE_EMAIL_FAILED:
                     return  '<div class="alert alert-warning alert-dismissible">
                             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            Podany adres email jest już w użyciu, wybierz inny i spróbuj ponownie.
+                            Podany adres email jest już w użyciu lub jest niepoprawny, wybierz inny i spróbuj ponownie.
+                            </div>';
+                case StatusesEnum::UPDATE_USER_PERSONAL_DATA_FAILED:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Podane dane są niepoprawne, sprawdź czy są zgodne z naszymi zasadami:
+                            <br>-Imię musi mieć minimum 3 znaki i maksimum 25
+                            <br>-Nazwisko musi mieć minimum 3 znaki i maksimum 50
+                            </div>';
+                case StatusesEnum::UPDATE_USER_PASSWORD_FAILED:
+                    return  '<div class="alert alert-warning alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Podane dane są niepoprawne, sprawdź czy są zgodne z naszymi zasadami:
+                            <br>-Hasła muszą być takie same
+                            <br>-Hasło musi mieć minimum 8 znaków
                             </div>';
             }
         }

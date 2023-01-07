@@ -5,6 +5,12 @@ include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 include __DIR__ . '/template/navbar.php';
 
+
+if(isset($_SESSION['loggedIn'])){
+   Header("Location: /html/myData.php");
+   exit();
+}
+
 $validator = new Validator();
 $csrfToken = new CSRFToken();
 $userMapper = new UserMapper();
@@ -61,13 +67,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
 
 ?>
    <div class="contact">
-      <?php
-      if(isset($_SESSION['status'])){
-         if (strlen($_SESSION['status']) > 0){
-            echo $_SESSION['status'];
+      <div class="container-sm">
+         <?php
+         if(isset($_SESSION['status'])){
+            if (strlen($_SESSION['status']) > 0){
+               echo $_SESSION['status'];
+               unset($_SESSION['status']);
+            }
          }
-      }
-      ?>
+         ?>
+      </div>
             <div class="container">
                <div class="row">
                   <div class="col-md-12">

@@ -11,7 +11,7 @@ $reservationMapper = new ReservationMapper();
 $reservations = $reservationMapper->getReservationsForAdmin();
 
 ?>
-<div class="container-fluid">
+<div class="container-md">
     <?php
         if(isset($_SESSION['status'])){
             if (strlen($_SESSION['status']) > 0){

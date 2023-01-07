@@ -11,16 +11,19 @@ $reservationMapper = new ReservationMapper();
 $reservations = $reservationMapper->getUserReservations($_SESSION['id']);
 
 ?>
-<div class="container-fluid userData">
-    <?php
-        if(isset($_SESSION['status'])){
+<div class="container-sm mb-5">
+    <div class="mt-2">
+         <?php
+         if(isset($_SESSION['status'])){
             if (strlen($_SESSION['status']) > 0){
-                echo $_SESSION['status'];
+               echo $_SESSION['status'];
+               unset($_SESSION['status']);
             }
-        }
-    ?>
+         }
+         ?>
+    </div>
     <br>
-  <h2>Moje Dane</h2>
+  <h2>Moje rezerwacje</h2>
   <br>
   <table class="table table-hover table-light table-striped mt-2">
     <thead>

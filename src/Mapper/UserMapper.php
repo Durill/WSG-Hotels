@@ -87,20 +87,19 @@ class UserMapper{
      */
     private function accountExist($email){
         try{
+            $exists = false;
             if(strlen($email) > 0){
                 $statement = $this->connection->prepare('SELECT id FROM users WHERE email = ?');
                 $statement->bind_param('s', $email);
                 $statement->execute();
                 $statement->store_result();
+
                 if($statement->num_rows > 0){
-                    return true;
-                }else {
-                    return false;
+                    $exists = true;
                 }
                 $statement->close();
-            } else{
-                return false;
             }
+            return $exists;
         } catch (Exception $e){
             Header('Location: /html/errorPage.php');
             exit();
@@ -135,7 +134,7 @@ class UserMapper{
      * @return boolean value of validating process.
      */
     private function isNameValid($name){
-        if(strlen($name) >= self::NAME_MIN_LENGTH && strlen($name) <= self::NAME_MAX_LENGTH){
+        if(strlen($name) >= self::NAME_MIN_LENGTH && strlen($name) <= self::NAME_MAX_LENGTH && ctype_alpha($name)){
             return true;
         }else{
             return false;
@@ -150,7 +149,7 @@ class UserMapper{
      * @return boolean value of validating process.
      */
     private function isSurnameValid($surname){
-        if((strlen($surname) >= self::SURNAME_MIN_LENGTH && strlen($surname) <= self::SURNAME_MAX_LENGTH)){
+        if((strlen($surname) >= self::SURNAME_MIN_LENGTH && strlen($surname) <= self::SURNAME_MAX_LENGTH && ctype_alpha($surname))){
             return true;
         }else {
             return false;
@@ -304,13 +303,16 @@ class UserMapper{
     function updateUserData(User $user){
         try{
             $this->openDBConnection();
-
-            $statement = $this->connection->prepare('UPDATE users SET name = ?, surname = ? WHERE id = ?');
-            $statement->bind_param('ssi',$user->getName(), $user->getSurname(), $user->getId());
-            $statement->execute();
-            $statement->close();
-            $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::OK);
-            $this->connection->close();
+            if ($this->isNameValid($user->getName()) && $this->isSurnameValid($user->getSurname())){
+                $statement = $this->connection->prepare('UPDATE users SET name = ?, surname = ? WHERE id = ?');
+                $statement->bind_param('ssi',$user->getName(), $user->getSurname(), $user->getId());
+                $statement->execute();
+                $statement->close();
+                $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::OK);
+                $this->connection->close();
+            } else {
+                $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::UPDATE_USER_PERSONAL_DATA_FAILED);
+            }
         } catch(Exception $e){
             Header('Location: /html/errorPage.php');
             exit();
@@ -328,7 +330,7 @@ class UserMapper{
         try{
             $this->openDBConnection();
 
-            if(!$this->accountExist($email)){
+            if(filter_var($email, FILTER_VALIDATE_EMAIL) && !$this->accountExist($email)){
                 $statement = $this->connection->prepare('UPDATE users SET email = ? WHERE id = ?');
                 $statement->bind_param('si',$email,  $id);
                 $statement->execute();
@@ -369,10 +371,10 @@ class UserMapper{
                         $statement->execute();
                         $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::OK);
                     } else {
-                        $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+                        $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::UPDATE_USER_PASSWORD_FAILED);
                     }
                 } else {
-                    $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);
+                    $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::UPDATE_USER_PASSWORD_FAILED);
                 }
                 $statement->close();
                 $this->connection->close();

@@ -16,31 +16,25 @@
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
    </head>
-   <body class="main-layout">
+   <body class="main-layout d-flex justify-content-between flex-column min-vh-100">
    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
          <a class="navbar-brand" href="#">
-            <img src="images/BSG-LOGO-wh.png" alt="Logo" style='width:60px;height:auto;'>
+            <img src="/html/images/BSG-LOGO-wh.png" alt="Logo" style='width:60px;height:auto;'>
          </a>
-         <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
-         </button> -->
+         </button>
          <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
             <li class="nav-item">
-               <a class="nav-link" href="#">Home</a>
+               <a class="nav-link" href="/html/index.php">Strona główna</a>
             </li>
-            <li class="nav-item">
-               <a class="nav-link" href="#">O Nas</a>
-            </li>
-            <li class="nav-item">
-               <a class="nav-link" href="#">Oferta</a>
-            </li>  
             <?php
                if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
                   echo '<li class="nav-item dropdown">
                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                           <img src="images/profile-icon.png" alt="Logo" style="width:30px;height:auto;opacity:0.55;">
+                           <img src="/html/images/profile-icon.png" alt="Logo" style="width:30px;height:auto;opacity:0.55;">
                            </a>
                            <ul class="dropdown-menu">
                               <li><a class="dropdown-item" href="/html/createReservation.php">Rezerwuj</a></li>
@@ -62,3 +56,4 @@
          </div>
       </div>
    </nav>
+   <div class="content">

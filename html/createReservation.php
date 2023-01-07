@@ -29,32 +29,50 @@ if (isset($_POST['from_date']) && isset($_POST['to_date']) && isset($_POST['csrf
 
 ?>
 
-<div class="container-fluid userData">
-    <?php
-      if(isset($_SESSION['status'])){
-        if (strlen($_SESSION['status']) > 0){
-           echo $_SESSION['status'];
-           unset($_SESSION['status']);
+<div class="container-sm mb-5">
+    <div class="mt-2">
+        <?php
+        if(isset($_SESSION['status'])){
+            if (strlen($_SESSION['status']) > 0){
+            echo $_SESSION['status'];
+            unset($_SESSION['status']);
+            }
         }
-     }
-    ?>
+        ?>
+    </div>
     <br>
   <h2>Zarezerwuj pokój</h2>
   <br>
-  <form action="" method="POST" class="dataForms">
+  <form action="" method="POST" class="d-md-none">
     <?php echo $csrfToken->getTokenInput(); ?>
-    <div class="row dataRows">
-        <div class="col-1"><p>Od:</p></div>
-        <div class="col-2"><input class="form-control" type="date" id="from_date" name="from_date"></div>
+    <div class="d-flex gap-3 flex-wrap">
+        <div>
+            <p class="mb-0">Od:</p>
+            <input class="form-control mb-0" type="date" id="from_date" name="from_date">
+        </div>
+        <div>
+            <p class="mb-0">Do:</p>
+            <input class="form-control mb-0" type="date" id="to_date" name="to_date">
+        </div>
+        <div class="d-flex flex-column-reverse">
+            <button type="submit" class="btn btn-primary">Dalej</button>
+        </div>
     </div>
-    <div class="row dataRows">
-        <div class="col-1"><p>Do:</p></div>
-        <div class="col-2"><input class="form-control" type="date" id="to_date" name="to_date"></div>
-    </div>
-    <br>
-    <div class="row dataRows">
-        <div class="col-1"></div>
-        <div class="col-1"><input type="submit" class="btn btn-primary" value="Dalej"></input></div>
+  </form>
+  <form action="" method="POST" class="d-none d-md-block">
+    <?php echo $csrfToken->getTokenInput(); ?>
+    <div class="d-flex gap-3 flex-wrap">
+        <div class="d-flex justify-content-around align-items-start flex-column">
+            <p class="mb-0">Od:</p>
+            <p class="mb-0">Do:</p>
+        </div>
+        <div>
+            <input class="form-control mb-2" type="date" id="from_date" name="from_date">
+            <input class="form-control mb-0" type="date" id="to_date" name="to_date">
+        </div>
+        <div class="d-flex flex-column-reverse">
+            <button type="submit" class="btn btn-primary">Dalej</button>
+        </div>
     </div>
   </form>
 </div>

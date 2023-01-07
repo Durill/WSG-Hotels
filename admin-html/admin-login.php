@@ -6,6 +6,11 @@ include_once __DIR__ . '/../src/Entity/Admin.php';
 
 session_start();
 
+if(isset($_SESSION['adminIn'])){
+	Header("Location: /admin-html/admin-reservations.php");
+	exit();
+ }
+
 $csrfToken = new CSRFToken();
 $validator = new Validator();
 $adminMapper = new AdminMapper();
