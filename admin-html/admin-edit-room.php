@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/RoomMapper.php';
 include_once __DIR__ . '/../src/Entity/Room.php';
 include __DIR__ . '/admin-navbar.php';
@@ -7,31 +8,34 @@ if(!isset($_SESSION['adminIn'])){
     Header("Location: /admin-html/admin-login.php");
 }
 
+$csrfToken = new CSRFToken();
 $validator = new Validator();
 $roomMapper = new RoomMapper();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $id = $places = $price = $type = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+    if ($csrfToken->verifyToken($_POST['csrf_token'])){
+        $id = $places = $price = $type = "";
 
-    if (isset($_POST["id"])) {
-      $id = $validator->test_input($_POST["id"]);
+        if (isset($_POST["id"])) {
+        $id = $validator->test_input($_POST["id"]);
+        }
+
+        if (isset($_POST["places"])) {
+        $places = $validator->test_input($_POST["places"]);
+        }
+
+        if (isset($_POST["price"])) {
+        $price = $validator->test_input($_POST["price"]);
+        }
+
+        if (isset($_POST["type"])) {
+        $type = $validator->test_input($_POST["type"]);
+        }
+
+        $room = new Room($places, $price, $type);
+        $room->setId($id);
+        $roomMapper->updateRoom($room);
     }
-
-    if (isset($_POST["places"])) {
-      $places = $validator->test_input($_POST["places"]);
-    }
-
-    if (isset($_POST["price"])) {
-      $price = $validator->test_input($_POST["price"]);
-    }
-
-    if (isset($_POST["type"])) {
-      $type = $validator->test_input($_POST["type"]);
-    }
-
-    $room = new Room($places, $price, $type);
-    $room->setId($id);
-    $roomMapper->updateRoom($room);
 }
 
 $room = "";
@@ -55,6 +59,7 @@ if (isset($_GET['id'])){
     }
     ?>
     <form action="" method="POST">
+        <?php echo $csrfToken->getTokenInput(); ?>
         <div class="mb-3">
             <label for="places" class="form-label">Ilość miejsc</label>
             <input value="<?php echo $room->getPlaces(); ?>"required type="number" class="form-control" name="places" id="places" min="1" max="10">

@@ -5,6 +5,8 @@ class StatusesEnum{
     const OK = "OK";
     const CREATE_FAILED = "CREATE_FAILED";
     const UPDATE_FAILED = "UPDATE_FAILED";
+    // csrf
+    const CSRF_TOKEN_NOT_VALID = "CSRF_TOKEN_NOT_VALID";
     // users
     const USER_NOT_FOUND = "USER_NOT_FOUND";
     const REGISTER_FAILED = "REGISTER_FAILED";

@@ -367,7 +367,6 @@ class UserMapper{
                         $statement = $this->connection->prepare('UPDATE users SET password = ? WHERE id = ?');
                         $statement->bind_param('si', password_hash($passwords[1], PASSWORD_DEFAULT), $id);
                         $statement->execute();
-                        $statement->close();
                         $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::OK);
                     } else {
                         $_SESSION['status'] =  $this->responses->userResponse(StatusesEnum::LOGIN_FAILED);

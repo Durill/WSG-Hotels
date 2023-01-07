@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . '/template/navbar.php';
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/ReservationMapper.php';
 
 if(!isset($_SESSION['loggedIn'])){
@@ -8,6 +9,7 @@ if(!isset($_SESSION['loggedIn'])){
     exit();
 }
 $validator = new Validator;
+$csrfToken = new CSRFToken();
 $reservationMapper = new ReservationMapper();
 
 if (isset($_SESSION['second_step'])){
@@ -17,10 +19,12 @@ if (isset($_SESSION['second_step'])){
 }
 
 
-if (isset($_POST['from_date']) && isset($_POST['to_date'])) {
-    $from_date = $validator->test_input($_POST['from_date']);
-    $to_date = $validator->test_input($_POST['to_date']);
-    $reservationMapper->selectReservationDates($from_date, $to_date);
+if (isset($_POST['from_date']) && isset($_POST['to_date']) && isset($_POST['csrf_token'])) {
+    if ($csrfToken->verifyToken($_POST['csrf_token'])){
+        $from_date = $validator->test_input($_POST['from_date']);
+        $to_date = $validator->test_input($_POST['to_date']);
+        $reservationMapper->selectReservationDates($from_date, $to_date);
+    }
 }
 
 ?>
@@ -38,6 +42,7 @@ if (isset($_POST['from_date']) && isset($_POST['to_date'])) {
   <h2>Zarezerwuj pokój</h2>
   <br>
   <form action="" method="POST" class="dataForms">
+    <?php echo $csrfToken->getTokenInput(); ?>
     <div class="row dataRows">
         <div class="col-1"><p>Od:</p></div>
         <div class="col-2"><input class="form-control" type="date" id="from_date" name="from_date"></div>

@@ -115,6 +115,17 @@ include_once __DIR__ . '/StatusesEnum.php';
                             </div>';
             }
         }
+
+        function CSRFResponse($status){
+            switch($status){
+                case StatusesEnum::CSRF_TOKEN_NOT_VALID:
+                    return  '<div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            Niepoprawny CSRF token!
+                            <br>-Odśwież stronę i spróbuj ponownie.
+                            </div>';
+                }
+        }
     }
 
 ?>

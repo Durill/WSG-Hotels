@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 
@@ -7,27 +8,29 @@ include __DIR__ . '/template/navbar.php';
 
 $validator = new Validator();
 $userMapper = new UserMapper();
+$csrfToken = new CSRFToken();
 $emailErr = $passErr = "";
 $email = $pass = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    if (!isset($_POST["email"])) {
-      $emailErr = "Podaj email!";
-    } else {
-      $email = $validator->test_input($_POST["email"]);
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Email nieprawidłowy";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+   if ($csrfToken->verifyToken($_POST['csrf_token'])){
+      if (!isset($_POST["email"])) {
+        $emailErr = "Podaj email!";
+      } else {
+        $email = $validator->test_input($_POST["email"]);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+          $emailErr = "Email nieprawidłowy";
+        }
       }
-    }
-
-    if (empty($_POST["password"])) {
-      $passErr = "Hasło jest wymagane";
-    }else{
-      $pass = $_POST["password"];
-    }
-
-   $userMapper->loginUser($email, $pass);
+  
+      if (empty($_POST["password"])) {
+        $passErr = "Hasło jest wymagane";
+      }else{
+        $pass = $_POST["password"];
+      }
+  
+     $userMapper->loginUser($email, $pass);
+   }
 }
 
 
@@ -37,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if(isset($_SESSION['status'])){
          if (strlen($_SESSION['status']) > 0){
             echo $_SESSION['status'];
+            unset($_SESSION['status']);
          }
       }
       ?>
@@ -50,7 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                </div>
                <div class="row">
                   <div class="col-md-10 offset-md-1">
-                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="main_form">
+                     <form action="" method="POST" class="main_form">
+                        <?php echo $csrfToken->getTokenInput(); ?>
                         <div class="row">
                            <div class="col-md-12">
                               <span class="error"><?php echo $emailErr;?></span>

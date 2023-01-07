@@ -1,5 +1,6 @@
 <?php
 include __DIR__ . '/template/navbar.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 
@@ -8,6 +9,7 @@ if(!isset($_SESSION['loggedIn'])){
     exit();
 }
 
+$csrfToken = new CSRFToken();
 $user = new User();
 $userMapper = new UserMapper();
 
@@ -15,19 +17,21 @@ if(isset($_SESSION['id'])){
     $user = $userMapper->getUserData($_SESSION['id']);
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(isset($_POST['dataChanger'])){
-        $userNewData = new User();
-        $userNewData->setId($_SESSION['id']);
-        $userNewData->setName($_POST['name']);
-        $userNewData->setSurname($_POST['surname']);
-        $userMapper->updateUserData($userNewData);
-        $user = $userMapper->getUserData($_SESSION['id']);
-    }elseif(isset($_POST['passwordChanger'])){
-        $userMapper->updateUserPassword($_SESSION['id'], array($_POST['oldPassword'], $_POST['newPassword'], $_POST['newRePassword']));
-    }elseif(isset($_POST['emailChanger'])){
-        $userMapper->updateUserEmail($_SESSION['id'], $_POST['email']);
-        $user = $userMapper->getUserData($_SESSION['id']);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+    if ($csrfToken->verifyToken($_POST['csrf_token'])){
+        if(isset($_POST['dataChanger'])){
+            $userNewData = new User();
+            $userNewData->setId($_SESSION['id']);
+            $userNewData->setName($_POST['name']);
+            $userNewData->setSurname($_POST['surname']);
+            $userMapper->updateUserData($userNewData);
+            $user = $userMapper->getUserData($_SESSION['id']);
+        }elseif(isset($_POST['passwordChanger'])){
+            $userMapper->updateUserPassword($_SESSION['id'], array($_POST['oldPassword'], $_POST['newPassword'], $_POST['newRePassword']));
+        }elseif(isset($_POST['emailChanger'])){
+            $userMapper->updateUserEmail($_SESSION['id'], $_POST['email']);
+            $user = $userMapper->getUserData($_SESSION['id']);
+        }
     }
 }
 
@@ -45,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2>Moje Dane</h2>
   <br>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="dataForms">
+    <?php echo $csrfToken->getTokenInput(); ?>
     <div class="row dataRows">
         <div class="col-1"><p>Imię:</p></div>
         <div class="col-2"><input class="form-control" type="text" id="name" value="<?php echo $user->getName(); ?>" name="name"></div>
@@ -63,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2>Mój Email</h2>
   <br>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="dataForms">
+    <?php echo $csrfToken->getTokenInput(); ?>  
     <div class="row dataRows">
         <div class="col-1"><p>Email:</p></div>
         <div class="col-2"><input class="form-control" type="email" id="email" value="<?php echo $user->getEmail(); ?>" name="email"></div>
@@ -77,6 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <h2>Hasło</h2>
   <br>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="passForms">
+    <?php echo $csrfToken->getTokenInput(); ?>  
     <div class="row dataRows">
         <div class="col-1"><p>Aktualne hasło:</p></div>
         <div class="col-2"><input type="password" class="form-control" id="oldPassword" name="oldPassword"></div>
