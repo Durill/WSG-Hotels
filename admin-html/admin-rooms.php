@@ -13,7 +13,7 @@ if(isset($_SESSION['status'])){
         unset($_SESSION['status']);
     }
     }
-    $rooms = $roomMapper->getRooms(); //TODO add rooms list
+    $rooms = $roomMapper->getRooms();
 ?>
 <div class="container-md mt-5">
     <div class="d-flex flex-row-reverse">

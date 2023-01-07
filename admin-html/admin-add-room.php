@@ -1,5 +1,6 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/RoomMapper.php';
 include_once __DIR__ . '/../src/Entity/Room.php';
 include __DIR__ . '/admin-navbar.php';
@@ -7,27 +8,29 @@ if(!isset($_SESSION['adminIn'])){
     Header("Location: /admin-html/admin-login.php");
 }
 
+$csrfToken = new CSRFToken();
 $validator = new Validator();
 $roomMapper = new RoomMapper();
 $placesErr = $priceErr = $typeErr = "";
 $places = $price = $type = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+    if ($csrfToken->verifyToken($_POST['csrf_token'])){
+        if (isset($_POST["places"])) {
+        $places = $validator->test_input($_POST["places"]);
+        }
 
-    if (isset($_POST["places"])) {
-      $places = $validator->test_input($_POST["places"]);
+        if (isset($_POST["price"])) {
+        $price = $validator->test_input($_POST["price"]);
+        }
+
+        if (isset($_POST["type"])) {
+        $type = $validator->test_input($_POST["type"]);
+        }
+
+        $room = new Room($places, $price, $type);
+        $roomMapper->createRoom($room);
     }
-
-    if (isset($_POST["price"])) {
-      $price = $validator->test_input($_POST["price"]);
-    }
-
-    if (isset($_POST["type"])) {
-      $type = $validator->test_input($_POST["type"]);
-    }
-
-    $room = new Room($places, $price, $type);
-    $roomMapper->createRoom($room);
 }
 
 if(isset($_SESSION['status'])){
@@ -38,7 +41,8 @@ if(isset($_SESSION['status'])){
 }
 ?>
 <div class="container-md mt-5">
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+    <form action="" method="POST">
+        <?php echo $csrfToken->getTokenInput(); ?>
         <div class="mb-3">
             <label for="places" class="form-label">Ilość miejsc</label>
             <input required type="number" class="form-control" name="places" id="places" min="1" max="10">

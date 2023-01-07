@@ -2,6 +2,7 @@
 include __DIR__ . '/template/navbar.php';
 include_once __DIR__ . '/../src/Responses.php';
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/ReservationMapper.php';
 include_once __DIR__ . '/../src/Entity/Reservation.php';
 
@@ -18,22 +19,25 @@ if(!(isset($_SESSION['available_rooms']) && isset($_SESSION['from_date']) && iss
 $_SESSION['second_step'] = 1;
 $available_rooms = unserialize($_SESSION['available_rooms']);
 $validator = new Validator;
+$csrfToken = new CSRFToken();
 $reservationMapper = new ReservationMapper();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['room_id'])) {
-    $id = $validator->test_input($_POST['room_id']);
-    $in_rooms = false;
-    foreach($available_rooms as $room){
-        if ($room->getId() == $id){
-            $in_rooms = true;
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['room_id']) && isset($_POST['csrf_token'])) {
+    if ($csrfToken->verifyToken($_POST['csrf_token'])){
+        $id = $validator->test_input($_POST['room_id']);
+        $in_rooms = false;
+        foreach($available_rooms as $room){
+            if ($room->getId() == $id){
+                $in_rooms = true;
+            }
         }
-    }
-    if ($in_rooms) {
-        $reservation = new Reservation($_POST['room_id'], $_SESSION['id'], $_SESSION['from_date'], $_SESSION['to_date']);
-        $available_rooms = $reservationMapper->createReservation($reservation);
-    } else {
-        $responses = new Responses();
-        $_SESSION['status'] = $responses->reservationResponse(StatusesEnum::ROOM_NOT_VALID);
+        if ($in_rooms) {
+            $reservation = new Reservation($_POST['room_id'], $_SESSION['id'], $_SESSION['from_date'], $_SESSION['to_date']);
+            $available_rooms = $reservationMapper->createReservation($reservation);
+        } else {
+            $responses = new Responses();
+            $_SESSION['status'] = $responses->reservationResponse(StatusesEnum::ROOM_NOT_VALID);
+        }
     }
 }
 
@@ -69,11 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['room_id'])) {
                         <td>'.$room->getPrice().'</td>
                         <td>'.ucfirst($room->getType()).'</td>
                         <td>
-                            <form action="" method="POST">
-                                <input type="hidden" value="'.$room->getId().'" name="room_id"></input>
-                                <input type="submit" value="Zarezerwuj" class="btn btn-sm btn-success"></input>
-                            </form>
-                        </td></tr>';
+                            <form action="" method="POST">';
+                echo $csrfToken->getTokenInput();
+                echo '<input type="hidden" value="'.$room->getId().'" name="room_id"></input>
+                    <input type="submit" value="Zarezerwuj" class="btn btn-sm btn-success"></input>
+                </form>
+            </td></tr>';
             }
         ?>
         </tbody>

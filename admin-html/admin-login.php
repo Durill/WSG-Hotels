@@ -1,28 +1,33 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/AdminMapper.php';
 include_once __DIR__ . '/../src/Entity/Admin.php';
 
+session_start();
+
+$csrfToken = new CSRFToken();
 $validator = new Validator();
 $adminMapper = new AdminMapper();
 $username = $password = $usernameErr = $passwordErr = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+	if ($csrfToken->verifyToken($_POST['csrf_token'])){
+		if (!isset($_POST["username"])) {
+			$usernameErr = "Podaj login!";
+		} else {
+			$username = $validator->test_input($_POST["username"]);
+		}
 
-    if (!isset($_POST["username"])) {
-        $usernameErr = "Podaj login!";
-    } else {
-        $username = $validator->test_input($_POST["username"]);
-    }
+		if (empty($_POST["password"])) {
+		$passwordErr = "Hasło jest wymagane";
+		} else{
+		$password = $_POST["password"];
+		}
 
-    if (empty($_POST["password"])) {
-      $passwordErr = "Hasło jest wymagane";
-    } else{
-      $password = $_POST["password"];
-    }
-
-    $admin = new Admin($username, $password);
-    $adminMapper->loginAdmin($admin);
+		$admin = new Admin($username, $password);
+		$adminMapper->loginAdmin($admin);
+	}
 }
 
 ?>
@@ -108,12 +113,20 @@ body {
       if(isset($_SESSION['adminStatus'])){
 		if (strlen($_SESSION['adminStatus']) > 0){
 		   echo $_SESSION['adminStatus'];
+		   unset($_SESSION['adminStatus']);
+		}
+	 }
+      if(isset($_SESSION['status'])){
+		if (strlen($_SESSION['status']) > 0){
+		   echo $_SESSION['status'];
+		   unset($_SESSION['status']);
 		}
 	 }
       ?>
 		<div class="login">
 			<h1>Admin Panel - Logowanie</h1>
-			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+			<form action="" method="POST">
+				<?php echo $csrfToken->getTokenInput(); ?>
                 <span class="error"><?php echo $usernameErr;?></span>
 				<label for="username">
 					<i class="fas fa-user"></i>

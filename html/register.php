@@ -1,57 +1,61 @@
 <?php
 include_once __DIR__ . '/../src/Validator.php';
+include_once __DIR__ . '/../src/CSRFToken.php';
 include_once __DIR__ . '/../src/Mapper/UserMapper.php';
 include_once __DIR__ . '/../src/Entity/User.php';
 include __DIR__ . '/template/navbar.php';
 
 $validator = new Validator();
+$csrfToken = new CSRFToken();
 $userMapper = new UserMapper();
 $nameErr = $surnameErr = $emailErr = $passErr = $rePassErr = "";
 $name = $surname = $email = $pass = $rePass = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   if (empty($_POST["name"])) {
-      $nameErr = "Podaj imię!";
-    } else {
-      $name = $validator->test_input($_POST["name"]);
-      if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
-        $nameErr = "Tylko litery są dozwolone";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['csrf_token'])) {
+   if ($csrfToken->verifyToken($_POST['csrf_token'])){
+      if (empty($_POST["name"])) {
+         $nameErr = "Podaj imię!";
+      } else {
+         $name = $validator->test_input($_POST["name"]);
+         if (!preg_match("/^[a-zA-Z-' ]*$/",$name)) {
+         $nameErr = "Tylko litery są dozwolone";
+         }
       }
-    }
 
-    if (empty($_POST["surname"])) {
-      $surnameErr = "Podaj nazwisko!";
-    } else {
-      $surname = $validator->test_input($_POST["surname"]);
-      if (!preg_match("/^[a-zA-Z-' ]*$/",$surname)) {
-        $surnameErr = "Tylko litery są dozwolone";
+      if (empty($_POST["surname"])) {
+         $surnameErr = "Podaj nazwisko!";
+      } else {
+         $surname = $validator->test_input($_POST["surname"]);
+         if (!preg_match("/^[a-zA-Z-' ]*$/",$surname)) {
+         $surnameErr = "Tylko litery są dozwolone";
+         }
       }
-    }
 
-    if (empty($_POST["email"])) {
-      $emailErr = "Podaj email!";
-    } else {
-      $email = $validator->test_input($_POST["email"]);
-      if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Email nieprawidłowy";
+      if (empty($_POST["email"])) {
+         $emailErr = "Podaj email!";
+      } else {
+         $email = $validator->test_input($_POST["email"]);
+         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+         $emailErr = "Email nieprawidłowy";
+         }
       }
-    }
 
-    if (empty($_POST["password"])) {
-      $passErr = "Hasło jest wymagane";
-    }{
-      $pass = $_POST["password"];
-    }
+      if (empty($_POST["password"])) {
+         $passErr = "Hasło jest wymagane";
+      }{
+         $pass = $_POST["password"];
+      }
 
-    if (empty($_POST["rePassword"])) {
-      $passErr = "Hasło jest wymagane";
-    }else{
-      $rePass = $_POST["rePassword"];
-    }
+      if (empty($_POST["rePassword"])) {
+         $passErr = "Hasło jest wymagane";
+      }else{
+         $rePass = $_POST["rePassword"];
+      }
 
-    $user = new User();
-    $user->setUserForRegistration($name, $surname, $email, $pass, $rePass);
-    $userMapper->registerUser($user);
+      $user = new User();
+      $user->setUserForRegistration($name, $surname, $email, $pass, $rePass);
+      $userMapper->registerUser($user);
+   }
 }
 
 
@@ -75,6 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                <div class="row">
                   <div class="col-md-10 offset-md-1">
                      <form id="request" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST" class="main_form">
+                        <?php echo $csrfToken->getTokenInput(); ?>   
                         <div class="row">
                            <div class="col-md-12 ">
                               <span class="error"><?php echo $nameErr;?></span>
