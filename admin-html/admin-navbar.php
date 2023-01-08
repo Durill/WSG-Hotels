@@ -16,9 +16,6 @@
   <div class="container-fluid">
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link active" href="#">Dashboard</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" href="/admin-html/admin-reservations.php">Rezerwacje</a>
       </li>
       <li class="nav-item">

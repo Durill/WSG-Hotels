@@ -19,7 +19,7 @@
    <body class="main-layout d-flex justify-content-between flex-column min-vh-100">
    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
       <div class="container-fluid">
-         <a class="navbar-brand" href="#">
+         <a class="navbar-brand" href="/html/index.php">
             <img src="/html/images/BSG-LOGO-wh.png" alt="Logo" style='width:60px;height:auto;'>
          </a>
          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
